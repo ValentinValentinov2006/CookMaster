@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile | CookMaster</title>
+    <link rel="stylesheet" type="text/css" href="/css/editProfile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <h1>CookMaster</h1>
+    <h2>Edit Profile</h2>
+</header>
+
+<main>
+    <h1>Your Profile</h1>
+    <form th:action="@{/users/{id}/profile(id=${user.id})}" th:method="POST" th:object="${profileRequest}">
+        <input type="hidden" name="_method" value="PATCH"/>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+        <div class="wrapper-card">
+            <div class="row">
+                <label for="picture"><strong>Profile Picture URL:</strong></label>
+                <input type="text" id="picture" placeholder="Paste image URL" th:value="${user.url}" th:field="*{url}">
+            </div>
+            <div class="row">
+                <label for="first_name"><strong>First Name:</strong></label>
+                <input type="text" id="first_name" placeholder="Enter first name" th:value="${user.firstName}" th:field="*{firstName}">
+            </div>
+            <div class="row">
+                <label for="last_name"><strong>Last Name:</strong></label>
+                <input type="text" id="last_name" placeholder="Enter last name" th:value="${user.lastName}" th:field="*{lastName}">
+            </div>
+            <div class="row">
+                <label for="email"><strong>Email:</strong></label>
+                <input type="email" id="email" placeholder="Enter email" th:value="${user.email}" th:field="*{email}">
+            </div>
+            <div class="button-group">
+                <button id="save-btn">Save Changes</button>
+                <a th:href ="@{/users/{id}/profile/cancel(id=${user.id})}">
+                    <button id="cancel-btn">Cancel</button>
+                </a>
+
+            </div>
+        </div>
+    </form>
+
+</main>
+
+<footer>
+
+</footer>
+
+<script>
+    document.getElementById('cancel-btn').addEventListener('click', function(event) {
+        event.preventDefault();
+        window.location.href = "/profile";
+    });
+</script>
+</body>
+</html>

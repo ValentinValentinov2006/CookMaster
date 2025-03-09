@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/create-dish.css">
+    <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+    <title>Create Dish</title>
+</head>
+<body>
+
+<header>
+    <h1>CookMaster</h1>
+    <h2>Add Dish</h2>
+</header>
+
+<main>
+
+    <form id="form-create-dish" th:action="@{/dish/create}" th:method="POST" th:object="${createDish}">
+        <div class="card">
+            <div class="wrapper-first-row">
+                <div class="name-wrapper">
+                    <label for="name"><span class="required">*</span> Name:</label>
+                    <input type="text" id="name" placeholder="Enter dish name" th:field="*{dishName}">
+                    <span th:if="${#fields.hasErrors('dishName')}" th:errors="*{dishName}">Dish Type Error</span>
+                </div>
+
+                <div class="select-wrapper">
+                    <label><span class="required">*</span> Dish Type:</label>
+                    <select id="type-select" th:field="*{dishType}">
+                        <option th:each="type : ${dishTypes}" th:value="${type}" th:text="${type.name()}"></option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('dishType')}" th:errors="*{dishType}">Dish Type Error</span>
+                </div>
+            </div>
+
+            <div class="wrapper-second-row">
+                <label for="description"><span class="required">*</span> Recipe Description:</label>
+                <textarea id="description" name="description" placeholder="Describe your dish..." th:field="*{dishDescription}"></textarea>
+                <span th:if="${#fields.hasErrors('dishDescription')}" th:errors="*{dishDescription}">Dish Type Error</span>
+            </div>
+
+            <div class="ingredients-wrapper">
+                <label for="ingredient"><span class="required">*</span> Ingredients:</label>
+                <div class="ingredient-input">
+                    <input type="text" id="ingredient" placeholder="Enter ingredient">
+                    <button type="button" class="add-btn" onclick="addIngredient(event)">+</button>
+                </div>
+                <ul id="ingredients-list"></ul>
+                <input type="hidden" id="ingredient-input" name="ingredients" th:field="*{ingredients}">
+                <span th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}">Dish Type Error</span>
+            </div>
+
+            <button type="submit" class="submit-btn">Create Dish</button>
+        </div>
+    </form>
+
+</main>
+
+<script>
+
+    function addIngredient(event) {
+        event.preventDefault();
+        const input = document.getElementById("ingredient");
+        const ingredient = input.value.trim();
+
+        if (ingredient !== "") {
+            const list = document.getElementById("ingredients-list");
+            const li = document.createElement("li");
+            li.innerHTML = `${ingredient} <button type="button" class="remove-btn" onclick="removeIngredient(this)">X</button>`;
+            list.appendChild(li);
+
+            const ingredientsInput = document.getElementById('ingredient-input');
+            let ingredients = ingredientsInput.value ? ingredientsInput.value.split(", ") : [];
+
+            ingredients.push(ingredient);
+            ingredientsInput.value = ingredients.join(", ");
+
+            input.value = "";
+        }
+    }
+
+    function removeIngredient(button) {
+        const li = button.parentElement;
+        const ingredientToRemove = li.textContent.trim().slice(0, -1);
+        li.remove();
+
+        const ingredientsInput = document.getElementById("ingredient-input");
+        let ingredients = ingredientsInput.value.split(", ").filter(ingredient => ingredient !== ingredientToRemove);
+        ingredientsInput.value = ingredients.join(", ");
+    }
+
+
+    function previewImage(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById("photo-preview-img");
+        const uploadText = document.getElementById("upload-text");
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                preview.src = reader.result;
+                preview.style.display = "block";
+                uploadText.textContent = "Image uploaded!";
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
+
+</body>
+</html>

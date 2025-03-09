@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/profile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Poppins:wght@300;400;700&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Profile</title>
+</head>
+
+<body>
+
+<main>
+
+    <div class="wrapper-functions">
+        <h2>Functions</h2>
+        <a href="/dish/create" class="nav-link"><i class="fas fa-plus-circle"></i> Create Dish</a>
+        <a href="/dish/editor" class="nav-link"><i class="fas fa-utensils"></i>Your Dishes</a>
+        <a href="/shopping.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Shopping List</a>
+        <a href="/store.html" class="nav-link"><i class="fas fa-store"></i> Add Store</a>
+        <a href="/calendar.html" class="nav-link"><i class="fas fa-calendar-alt"></i> Calendar</a>
+        <div class="wrapper-disconnect">
+            <button id="log-out-btn"><a href="/logout">Log Out</a></button>
+
+        </div>
+
+    </div>
+
+    <div class="wrapper-profile">
+        <div class="img-wrapper">
+            <img th:src="${user.url != null ? user.url : 'https://cdn-icons-png.freepik.com/256/1830/1830878.png?semt=ais_hybrid'}"
+                 alt="Profile Picture" id="photo">
+            <p th:text="${user.username}"></p>
+            <div class="wrapper-user-id">
+                <label>User ID:</label>
+                <p class="user-id" th:text = "${user.id}"></p>
+            </div>
+        </div>
+        <div class="wrapper-client-info">
+            <div class="wrapper-info-row">
+                <label><strong>Username:</strong></label>
+                <p th:text="${user.username}"></p>
+            </div>
+            <div class="wrapper-info-row">
+                <label><strong>Email:</strong></label>
+                <p th:text="${user.email}"></p>
+            </div>
+            <div class="wrapper-info-row">
+                <label><strong>Joined:</strong></label>
+                <p th:text="${#temporals.format(user.createdAt, 'dd-MM-yyyy')}"></p>
+            </div>
+            <div class="wrapper-info-row">
+                <label><strong>Last Updated:</strong></label>
+                <p th:text="${#temporals.format(user.updatedAt, 'dd-MM-yyyy')}"></p>
+            </div>
+
+
+            <div class="wrapper-edit-button">
+                <a th:href="@{'users/' + ${user.id} + '/profile'}" id="edit-btn">Edit <i class="fas fa-edit"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <footer></footer>
+
+
+</main>
+
+</body>
+
+</html>

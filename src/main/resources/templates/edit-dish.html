@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Dish</title>
+    <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/edit-dish.css">
+</head>
+
+<body>
+
+<header>
+    <h1>CookMaster</h1>
+    <h2>Edit Dish</h2>
+</header>
+
+<form th:action = "@{/dish/searching}"  th:method = "GET">
+    <form th:action="@{/dish/searching}" th:method="GET">
+        <div class="wrapper-search">
+            <div class="box-searching">
+                <input type="text" id="search-tab" name="name" placeholder="Search..." required>
+            </div>
+            <div class="icon-button-wrapper">
+                <button type="submit" id="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</form>
+
+
+<div class="card" id="edit-card" th:if="${dish}">
+    <div class="input-group">
+        <label for="dish-name">Dish Name:</label>
+        <input type="text" id="dish-name" value="Pizza" th:value = "${dish.name}">
+    </div>
+
+    <div class="input-group">
+        <label for="dish-type">Dish Type:</label>
+        <select id="dish-type" name ="type">
+            <option value="BREAKFAST" th:selected="${dish.type == 'BREAKFAST'}">Breakfast</option>
+            <option value="LUNCH" th:selected="${dish.type == 'LUNCH'}">Lunch</option>
+            <option value="DINNER" th:selected="${dish.type == 'DINNER'}">Dinner</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label for="description">Dish Description:</label>
+        <textarea id="description" th:text="${dish.description}">Delicious homemade pizza with fresh ingredients.</textarea>
+    </div>
+
+    <label>Ingredients:</label>
+    <div class="ingredient-input">
+        <input type="text" id="ingredient" placeholder="Enter ingredient">
+        <button class="add-btn" onclick="addIngredient()">+</button>
+    </div>
+
+    <ul id="ingredients-list">
+        <li th:each="ingredient : ${ingredients}">
+            <span th:text="${ingredient.name}"></span>
+            <button class="remove-btn">X</button>
+        </li>
+    </ul>
+
+    <button class="clear-btn" onclick="clearAll()">Remove All</button>
+
+    <div class="button-group">
+        <button class="save-btn">Save</button>
+        <button class="delete-btn">Delete</button>
+        <button class="shop-btn" onclick="openModal()">Add to <i class="fas fa-shopping-cart"></i></button>
+    </div>
+</div>
+
+<div id="storeModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Assign Ingredients to Stores</h2>
+        <label for="store-select">Select Store:</label>
+        <select id="store-select">
+            <option value="Store 1">Store 1</option>
+            <option value="Store 2">Store 2</option>
+            <option value="Store 3">Store 3</option>
+        </select>
+        <label for="ingredient-select">Select Ingredient:</label>
+        <select id="ingredient-select"></select>
+        <button onclick="assignIngredientToStore()">Assign</button>
+        <h3>Assigned Ingredients</h3>
+        <ul id="assigned-list"></ul>
+    </div>
+</div>
+
+<script>
+    let ingredients = [];
+    let storeAssignments = {};
+
+    function addIngredient() {
+        window.location.href = "/ingredient/new";
+        const input = document.getElementById("ingredient");
+        const ingredient = input.value.trim();
+        if (ingredient !== "") {
+            const list = document.getElementById("ingredients-list");
+            const li = document.createElement("li");
+            li.innerHTML = `${ingredient} <button class="remove-btn" onclick="removeIngredient(this)">X</button>`;
+            list.appendChild(li);
+            input.value = "";
+        }
+    }
+
+    function removeIngredient(button) {
+        button.parentElement.remove();
+    }
+
+    function clearAll() {
+        document.getElementById("ingredients-list").innerHTML = "";
+    }
+
+    function openModal() {
+        document.getElementById("storeModal").style.display = "block";
+
+
+        const ingredientsList = document.querySelectorAll("#ingredients-list li");
+        const ingredientSelect = document.getElementById("ingredient-select");
+
+
+        ingredientSelect.innerHTML = "";
+
+
+        ingredientsList.forEach(li => {
+            let ingredient = li.textContent.replace("X", "").trim(); // Премахваме "X" от текста
+            let option = document.createElement("option");
+            option.value = ingredient;
+            option.textContent = ingredient;
+            ingredientSelect.appendChild(option);
+        });
+    }
+
+    function closeModal() {
+        document.getElementById("storeModal").style.display = "none";
+    }
+
+    function assignIngredientToStore() {
+        const store = document.getElementById("store-select").value;
+        const ingredient = document.getElementById("ingredient-select").value;
+
+        if (!storeAssignments[store]) {
+            storeAssignments[store] = [];
+        }
+
+        if (!storeAssignments[store].includes(ingredient)) {
+            storeAssignments[store].push(ingredient);
+            updateAssignedList();
+            let ingredientSelect = document.getElementById("ingredient-select");
+            ingredientSelect.querySelector(`option[value="${ingredient}"]`).remove()
+        }
+    }
+
+    function updateAssignedList() {
+        const assignedList = document.getElementById("assigned-list");
+        assignedList.innerHTML = "";
+
+        for (let store in storeAssignments) {
+            let li = document.createElement("li");
+            li.innerHTML = `<strong>${store}:</strong> ${storeAssignments[store].join(", ")}`;
+            assignedList.appendChild(li);
+        }
+    }
+</script>
+
+</body>
+
+</html>

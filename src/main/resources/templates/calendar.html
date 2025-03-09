@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Weekly</title>
+    <link rel="stylesheet" href="calendar.css">
+    <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+    <script defer src="script.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>CookMaster</h1>
+    <h2>View Menu</h2>
+</header>
+
+<main>
+    <div class="week-container">
+
+    </div>
+</main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const weekContainer = document.querySelector(".week-container");
+        const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+        const today = new Date();
+        const todayIndex = today.getDay();
+
+        for (let i = 0; i < 7; i++) {
+            let date = new Date();
+            date.setDate(today.getDate() + i);
+            let formattedDate = date.toLocaleDateString("bg-BG", { day: "2-digit", month: "2-digit" });
+
+            let dayName = daysOfWeek[(todayIndex + i) % 7];
+
+            let card = document.createElement("div");
+            card.classList.add("day-card");
+            card.dataset.dayIndex = i;
+            card.innerHTML = `<h3>${dayName}</h3><p>${formattedDate}</p>`;
+            card.addEventListener("click", () => openMenu(i));
+
+            weekContainer.appendChild(card);
+        }
+    });
+
+    function openMenu(dayIndex) {
+        window.location.href = `menu.html?day=${dayIndex}`;
+    }
+
+</script>
+
+</body>
+</html>

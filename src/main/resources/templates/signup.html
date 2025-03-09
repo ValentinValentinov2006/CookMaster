@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/signup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Sign Up</title>
+</head>
+
+<body>
+<header>
+    <h1>CookMaster</h1>
+</header>
+<main>
+    <div class="form-wrapper">
+        <h2>Register Here</h2>
+
+        <form th:method="POST" th:action="@{/signup}" th:object="${registerRequest}" >
+            <div class="wrapper-row">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username"
+                th:fields = "*{username}" >
+                <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-warning">Error Text Here</small>
+            </div>
+
+            <div class="wrapper-row">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email"
+                th:fields = "*{email}" >
+                <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-warning">Error Text Here</small>
+            </div>
+
+            <div class="wrapper-row">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password"
+                th:fields = "*{password}" >
+                <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-warning">Error Text Here</small>
+            </div>
+
+            <div class="wrapper-row">
+                <label for="confirm">Confirm Password</label>
+                <input type="password" id="confirm" name="confirmPassword"
+                      th:field="*{confirmPassword}" >
+                <small th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="text-warning">Error Text Here</small>
+            </div>
+
+            <div class="wrapper-btn">
+                <button type="submit" class="submit-btn">Register</button>
+
+            </div>
+        </form>
+
+        <div class="account-check">
+            <p>Already have an account? <a href="/login">Log in here</a></p>
+        </div>
+    </div>
+</main>
+<footer></footer>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    text-align: center;
+    background-color: #f5f5f5;
+}
+
+header {
+    width: 100vw;
+    text-align: center;
+    padding: 1.5em 0;
+    background: linear-gradient(150deg, #ffbc03, #f58726);
+}
+
+header h1 {
+    font-size: 3em;
+    color: white;
+    font-family: 'Irish Grover', cursive;
+}
+
+header h2 {
+    font-size: 1.5em;
+    color: rgb(255, 255, 67);
+    font-family: 'Irish Grover', cursive;
+}
+
+
+.week-container {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    margin-top: 6em;
+}
+
+.day-card {
+    width: 8em;
+    padding: 55px;
+    background: #ffbc03;
+    color: white;
+    border-radius: 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.day-card:hover {
+    background: #f58726;
+}
+
+.day-card h3 {
+    font-size: 1.2em;
+}
+
+.day-card p {
+    font-size: 0.9em;
+}

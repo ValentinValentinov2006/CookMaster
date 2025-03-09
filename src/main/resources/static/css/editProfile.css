@@ -1,0 +1,139 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Irish Grover', cursive;
+    background-color: #f5f5f5;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    width: 100vw;
+    text-align: center;
+
+    background: linear-gradient(150deg, #ffbc03, #f58726);
+}
+
+header h1 {
+    font-size: 4em;
+    color: white;
+}
+
+header h2 {
+    font-size: 1.5em;
+    color: rgb(255, 255, 67);
+}
+
+main {
+    background: white;
+    padding: 2em;
+    border-radius: 1.2em;
+    box-shadow: 0 0.4em 1em rgba(0, 0, 0, 0.1);
+    width: 40em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2em;
+}
+
+h1 {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 1em;
+}
+
+
+main {
+   width: 45vw;
+}
+
+.row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #444;
+    font-size: 1.2em;
+}
+
+input {
+    width: 30vw;
+    padding: 12px;
+    border: 2px solid #f58726;
+    border-radius: 10px;
+    font-size: 1em;
+    background-color: #fff9e6;
+}
+
+input:focus {
+    outline: none;
+    border-color: #ffbc03;
+    box-shadow: 0 0 8px rgba(255, 188, 3, 0.5);
+}
+
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 1em;
+}
+
+button {
+    flex: 1;
+    padding: 12px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: 'Irish Grover', cursive;
+}
+
+footer {
+    padding: 4em;
+}
+
+#save-btn {
+    background: #ffbc03;
+    color: white;
+    margin-right: 10px;
+}
+
+#save-btn:hover {
+    background: #f58726;
+}
+
+#cancel-btn {
+    background: #ccc;
+    color: black;
+}
+
+#cancel-btn:hover {
+    background: #bbb;
+}
+
+
+@media (max-width: 600px) {
+    main {
+        width: 90%;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    button {
+        font-size: 1em;
+    }
+}

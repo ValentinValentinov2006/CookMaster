@@ -1,0 +1,198 @@
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+header {
+    width: 100vw;
+    text-align: center;
+    padding: 2em 0;
+    background: linear-gradient(150deg, #ffbc03, #f58726);
+}
+
+header h1 {
+    font-size: 3em;
+    color: white;
+}
+
+header h2 {
+    font-size: 1.5em;
+    color: rgb(255, 255, 67);
+}
+
+
+body {
+    font-family: 'Irish Grover', cursive;
+    background-color: #f5f5f5;
+    text-align: center;
+}
+
+
+#icon {
+    width: 30%;
+    height: 30%;
+    border-radius: 10px;
+    border: 5px solid #ffbc03;
+    padding: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    margin: 2em 0 3em 0;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 40%;
+
+    margin: 3em 0 3em 0;
+}
+
+
+.img-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.shop-info {
+    flex: 2;
+    margin-left: 30px;
+}
+
+.input-row {
+    margin-bottom: 1.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.input-row label {
+    font-size: 1.1em;
+    margin-bottom: 0.5em;
+}
+
+.input-row input {
+    padding: 10px;
+    font-size: 1em;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.input-row input:focus {
+    border-color: #f58726;
+    outline: none;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 2em;
+    margin-top: 1em;
+}
+
+.save-btn, .cancel-btn {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #ffbc03;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.save-btn:hover, .cancel-btn:hover {
+    background-color: #f58726;
+}
+
+.cancel-btn {
+    background-color: #ccc;
+}
+
+.cancel-btn:hover {
+    background-color: #bbb;
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2em;
+    }
+
+    header h2 {
+        font-size: 1.2em;
+    }
+
+    #icon {
+        width: 50%;
+        height: auto;
+    }
+
+    .card {
+        width: 80%;
+        padding: 15px;
+    }
+
+    .input-row {
+        margin-bottom: 1em;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 1em;
+    }
+
+    .save-btn, .cancel-btn {
+        width: 100%;
+        padding: 12px;
+    }
+}
+
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.8em;
+    }
+
+    header h2 {
+        font-size: 1em;
+    }
+
+    #icon {
+        width: 60%;
+        height: auto;
+    }
+
+    .card {
+        width: 95%;
+        padding: 10px;
+    }
+
+    .input-row input {
+        font-size: 0.9em;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 1em;
+    }
+
+    .save-btn, .cancel-btn {
+        width: 100%;
+        padding: 12px;
+    }
+}
