@@ -18,64 +18,72 @@
     <h2>Edit Dish</h2>
 </header>
 
-<form th:action = "@{/dish/searching}"  th:method = "GET">
-    <form th:action="@{/dish/searching}" th:method="GET">
-        <div class="wrapper-search">
-            <div class="box-searching">
-                <input type="text" id="search-tab" name="name" placeholder="Search..." required>
-            </div>
-            <div class="icon-button-wrapper">
-                <button type="submit" id="search-btn">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
+<!-- Search Form -->
+<form th:action="@{/dish/searching}" th:method="GET">
+    <div class="wrapper-search">
+        <div class="box-searching">
+            <input type="text" id="search-tab" name="name" placeholder="Search..." required>
         </div>
-    </form>
+        <div class="icon-button-wrapper">
+            <button type="submit" id="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
 </form>
 
+<!-- Edit Dish Form -->
+<div class="card" id="edit-card" th:if="${dishRequest}">
+    <form th:action="@{/dish/update/{id}(id=${dish.id})}" th:method="post" th:object="${dishRequest}">
+        <input type="hidden" name="_method" value="PATCH"/>
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
 
-<div class="card" id="edit-card" th:if="${dish}">
-    <div class="input-group">
-        <label for="dish-name">Dish Name:</label>
-        <input type="text" id="dish-name" value="Pizza" th:value = "${dish.name}">
-    </div>
+        <div class="input-group">
+            <label for="dish-name">Dish Name:</label>
+            <input type="text" id="dish-name" th:field="*{dishName}" required>
+        </div>
 
-    <div class="input-group">
-        <label for="dish-type">Dish Type:</label>
-        <select id="dish-type" name ="type">
-            <option value="BREAKFAST" th:selected="${dish.type == 'BREAKFAST'}">Breakfast</option>
-            <option value="LUNCH" th:selected="${dish.type == 'LUNCH'}">Lunch</option>
-            <option value="DINNER" th:selected="${dish.type == 'DINNER'}">Dinner</option>
-        </select>
-    </div>
+        <div class="input-group">
+            <label for="dish-type">Dish Type:</label>
+            <select id="dish-type" name="type" th:field="*{dishType}">
+                <option value="BREAKFAST">Breakfast</option>
+                <option value="LUNCH">Lunch</option>
+                <option value="DINNER">Dinner</option>
+            </select>
+        </div>
 
-    <div class="input-group">
-        <label for="description">Dish Description:</label>
-        <textarea id="description" th:text="${dish.description}">Delicious homemade pizza with fresh ingredients.</textarea>
-    </div>
+        <div class="input-group">
+            <label for="description">Dish Description:</label>
+            <textarea id="description" th:field="*{dishDescription}" required></textarea>
+        </div>
 
-    <label>Ingredients:</label>
-    <div class="ingredient-input">
-        <input type="text" id="ingredient" placeholder="Enter ingredient">
-        <button class="add-btn" onclick="addIngredient()">+</button>
-    </div>
+        <label>Ingredients:</label>
+        <div class="ingredient-input">
+            <input type="text" id="ingredient" placeholder="Enter ingredient">
+            <button type="button" class="add-btn" onclick="addIngredient()">+</button>
+        </div>
 
-    <ul id="ingredients-list">
-        <li th:each="ingredient : ${ingredients}">
-            <span th:text="${ingredient.name}"></span>
-            <button class="remove-btn">X</button>
-        </li>
-    </ul>
+        <ul id="ingredients-list">
+            <li th:each="ingredient : ${dishRequest.ingredients}">
+                <span th:text="${ingredient.name}"></span>
+                <button type="button" class="remove-btn" onclick="removeIngredient(this)">X</button>
+            </li>
+        </ul>
 
-    <button class="clear-btn" onclick="clearAll()">Remove All</button>
+        <button type="button" class="clear-btn" onclick="clearAll()">Remove All</button>
 
-    <div class="button-group">
-        <button class="save-btn">Save</button>
-        <button class="delete-btn">Delete</button>
-        <button class="shop-btn" onclick="openModal()">Add to <i class="fas fa-shopping-cart"></i></button>
-    </div>
+        <button type="submit" class="save-btn">Save</button>
+    </form>
+    <form th:action="@{/dish/delete/{id}(id=${dish.id})}" th:method="post" th:object="${dishRequest}">
+        <input type="hidden" name="_method" value="DELETE"/>
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+        <button type="submit" class="delete-btn">Delete</button>
+    </form>
+
+    <button type="button" class="shop-btn" onclick="openModal()">Add to <i class="fas fa-shopping-cart"></i></button>
 </div>
 
+<!-- Modal for Assigning Ingredients -->
 <div id="storeModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -121,17 +129,12 @@
 
     function openModal() {
         document.getElementById("storeModal").style.display = "block";
-
-
         const ingredientsList = document.querySelectorAll("#ingredients-list li");
         const ingredientSelect = document.getElementById("ingredient-select");
 
-
         ingredientSelect.innerHTML = "";
-
-
         ingredientsList.forEach(li => {
-            let ingredient = li.textContent.replace("X", "").trim(); // Премахваме "X" от текста
+            let ingredient = li.textContent.replace("X", "").trim();
             let option = document.createElement("option");
             option.value = ingredient;
             option.textContent = ingredient;
@@ -155,7 +158,7 @@
             storeAssignments[store].push(ingredient);
             updateAssignedList();
             let ingredientSelect = document.getElementById("ingredient-select");
-            ingredientSelect.querySelector(`option[value="${ingredient}"]`).remove()
+            ingredientSelect.querySelector(`option[value="${ingredient}"]`).remove();
         }
     }
 
@@ -172,5 +175,4 @@
 </script>
 
 </body>
-
 </html>

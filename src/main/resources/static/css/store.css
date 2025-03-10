@@ -46,7 +46,7 @@ main {
     align-items: center;
 }
 
-.card {
+form {
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -120,12 +120,12 @@ main {
     background-color: #f58726;
 }
 
-.cancel-btn {
-    background-color: #ccc;
-}
 
-.cancel-btn:hover {
-    background-color: #bbb;
+
+
+.required {
+    color: red;
+    font-weight: bold;
 }
 
 @media (max-width: 768px) {

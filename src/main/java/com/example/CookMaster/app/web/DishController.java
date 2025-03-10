@@ -1,6 +1,7 @@
 package com.example.CookMaster.app.web;
 
 
+
 import com.example.CookMaster.app.dish.model.DishType;
 import com.example.CookMaster.app.dish.service.DishService;
 import com.example.CookMaster.app.ingredient.model.Ingredient;
@@ -9,18 +10,18 @@ import com.example.CookMaster.app.security.AuthenticationMetadata;
 import com.example.CookMaster.app.user.model.User;
 import com.example.CookMaster.app.user.service.UserService;
 import com.example.CookMaster.app.web.dto.CreateDishRequest;
+import com.example.CookMaster.app.web.dto.EditDishRequest;
+import com.example.CookMaster.app.web.mapper.DtoMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("dish")
@@ -82,20 +83,36 @@ public class DishController {
             if (dish != null) {
                 model.addObject("dish", dish);
                 model.addObject("ingredients", ingredients);
+                model.addObject("dishRequest", DtoMapper.mapDishToEditDishRequest(dish));
             } else {
                 model.addObject("notFound", true);
             }
         }
 
-        return model;
+       return model;
     }
-    @PostMapping("/ingredient/new") // Двойни кавички!
-    public ModelAndView getPostIngredientNewRequest(@RequestParam(name = "name", required = false) String name) {
-        ModelAndView model = new ModelAndView();
-        var dish = dishService.findByName(name);
-       // dish.getIngredients().add()
-        return model;
+
+
+    @PatchMapping("/update/{id}")
+    public ModelAndView updateUserDishRequest(@PathVariable UUID id, @Valid  EditDishRequest request, BindingResult bindingResult) {
+        System.out.println(request);
+        if (bindingResult.hasErrors()) {
+            System.out.println();
+            return new ModelAndView("edit-dish");
+        }
+
+        dishService.editDishRequest(id, request);
+
+        System.out.println();
+        return new ModelAndView("redirect:/profile");
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ModelAndView deleteUserDishRequest(@PathVariable UUID id) {
+        dishService.deleteDish(id);
+        return new ModelAndView("redirect:/profile");
+    }
+
 
 
 }

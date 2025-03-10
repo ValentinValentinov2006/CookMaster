@@ -1,6 +1,6 @@
 package com.example.CookMaster.app.dish.service;
 
-import com.example.CookMaster.app.cloudinary.CloudinaryService;
+
 import com.example.CookMaster.app.dish.model.Dish;
 import com.example.CookMaster.app.dish.model.DishType;
 import com.example.CookMaster.app.dish.repository.DishRepository;
@@ -8,20 +8,19 @@ import com.example.CookMaster.app.exception.DomainException;
 import com.example.CookMaster.app.ingredient.model.Ingredient;
 import com.example.CookMaster.app.ingredient.service.IngredientService;
 import com.example.CookMaster.app.user.model.User;
-import com.example.CookMaster.app.user.service.UserService;
 import com.example.CookMaster.app.web.dto.CreateDishRequest;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.CookMaster.app.web.dto.EditDishRequest;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
+@Slf4j
 @Service
 public class DishService {
 
@@ -95,10 +94,26 @@ public class DishService {
 
 
     public Dish findByName(String name) {
-        Dish dish = mDishRepository.findByNameIgnoreCase(name).orElse(null);
-
-
+        Dish dish = mDishRepository.findByNameIgnoreCase(name).orElseThrow(() -> new DomainException("Dish not found"));
         return dish;
+    }
+
+
+    @Transactional
+    public void editDishRequest(UUID id, EditDishRequest request) {
+        Dish dish = mDishRepository.findById(id).orElseThrow(() -> new DomainException("Dish not found"));
+        System.out.println(request);
+        dish.setName(request.getDishName());
+        dish.setDescription(request.getDishDescription());
+        dish.setType(request.getDishType());
+        mDishRepository.save(dish);
+    }
+
+    public void deleteDish(UUID id) {
+
+        Dish dish = mDishRepository.findById(id).orElseThrow(() -> new DomainException("Dish not found"));
+        mDishRepository.delete(dish);
+        log.info("Dish with %s was deleted with (id) %s!".formatted(dish.getName(), dish.getId()));
     }
 }
 

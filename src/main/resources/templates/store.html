@@ -18,59 +18,57 @@
 </header>
 
 <main>
+    <form id="store-form" th:action="@{/store/new}" th:method="POST" th:object="${createStore}">
     <div class="card">
         <div class="img-wrapper">
             <img src="https://cdn-icons-png.flaticon.com/512/1795/1795901.png" alt="" id="icon">
         </div>
         <div class="shop-info">
             <div class="input-row">
-                <label for="name">Store Name:</label>
-                <input type="text" id="name" placeholder="Enter store name">
+                <label for="name"><span class="required">* </span>Store Name:</label>
+                <input type="text" id="name" placeholder="Enter store name" th:field="${createStore.storeName}">
+                <div th:if="${errors}" class="error">
+                    <ul>
+                        <li th:each="error : ${errors}" th:text="${error.defaultMessage}"></li>
+                    </ul>
+                </div>
             </div>
             <div class="input-row">
                 <label for="address">Address:</label>
-                <input type="text" id="address" placeholder="Enter store address">
+                <input type="text" id="address" placeholder="Enter store address (optional)" th:field="${createStore.address}">
+                <div th:if="${errors}" class="error">
+                    <ul>
+                        <li th:each="error : ${errors}" th:text="${error.defaultMessage}"></li>
+                    </ul>
+                </div>
             </div>
             <div class="input-row">
-                <label for="phone">Phone Number:</label>
-                <input type="text" id="phone" placeholder="Enter phone number">
+                <label for="phone"><span class="required">* </span>Phone Number:</label>
+                <input type="text" id="phone" placeholder="Enter phone number" th:field = "${createStore.phoneNumber}">
+                <div th:if="${errors}" class="error">
+                    <ul>
+                        <li th:each="error : ${errors}" th:text="${error.defaultMessage}"></li>
+                    </ul>
+                </div>
             </div>
             <div class="input-row">
                 <label for="notes">Notes:</label>
-                <input type="text" id="notes" placeholder="Additional notes (optional)">
+                <input type="text" id="notes" placeholder="Additional notes (optional)" th:field="${createStore.notes}">
+                <div th:if="${errors}" class="error">
+                    <ul>
+                        <li th:each="error : ${errors}" th:text="${error.defaultMessage}"></li>
+                    </ul>
+                </div>
             </div>
             <div class="button-group">
-                <button class="save-btn" onclick="saveStore()">Save Store</button>
-                <button class="cancel-btn" onclick="cancelStore()">Cancel</button>
+                <button class="save-btn" type="submit">Save Store</button>
+
             </div>
         </div>
     </div>
+    </form>
 </main>
 
-<script>
-    function saveStore() {
-        const name = document.getElementById('name').value;
-        const address = document.getElementById('address').value;
-        const phone = document.getElementById('phone').value;
-        const notes = document.getElementById('notes').value;
-
-        if (name) {
-
-            console.log('Store Saved:', { name, address, phone, notes });
-            alert('Store saved successfully!');
-
-        } else {
-            alert('Please fill in all required fields!');
-        }
-    }
-
-    function cancelStore() {
-        document.getElementById('name').value = '';
-        document.getElementById('address').value = '';
-        document.getElementById('phone').value = '';
-        document.getElementById('notes').value = '';
-    }
-</script>
 
 </body>
 

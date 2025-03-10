@@ -1,29 +1,28 @@
 package com.example.CookMaster.app.web.dto;
 
 import com.example.CookMaster.app.dish.model.DishType;
+import com.example.CookMaster.app.ingredient.model.Ingredient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
-import org.hibernate.validator.constraints.URL;
 
 import java.util.Set;
 
+@Builder
 @Data
-public class CreateDishRequest {
+public class EditDishRequest {
 
-
-    @NotNull(message = "Dish's Name is required!")
     @Size(min = 1, message = "Dish's Name cannot be empty")
     private String dishName;
 
-    @NotNull(message = "Dish's Type is required!")
+
     private DishType dishType;
 
-    @NotNull(message = "Dish's Description is required!")
+
     @Size(min = 5, message = "Dish's Description should be at least 5 characters")
     private String dishDescription;
 
-    @NotNull(message = "Ingredients are required!")
-    private Set<String> ingredients;
+
+    private Set<Ingredient> ingredients;
 }
