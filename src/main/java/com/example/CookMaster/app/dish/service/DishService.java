@@ -11,6 +11,7 @@ import com.example.CookMaster.app.user.model.User;
 import com.example.CookMaster.app.web.dto.CreateDishRequest;
 import com.example.CookMaster.app.web.dto.EditDishRequest;
 import jakarta.transaction.Transactional;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Getter
 public class DishService {
 
     private final DishRepository mDishRepository;
@@ -61,6 +63,8 @@ public class DishService {
         return dish;
     }
 
+
+
     private void addDishToIngredients(Dish dish, Set<Ingredient> ingredients) {
         for (Ingredient ingredient : ingredients) {
 
@@ -93,8 +97,7 @@ public class DishService {
 
 
     public void editDishRequest(UUID id, EditDishRequest request) {
-        Dish dish = mDishRepository.findById(id)
-                .orElseThrow(() -> new DomainException("Dish not found"));
+        Dish dish = findDishNyId(id);
 
         dish.setName(request.getDishName());
         dish.setDescription(request.getDishDescription());
@@ -115,6 +118,10 @@ public class DishService {
         Dish dish = mDishRepository.findById(id).orElseThrow(() -> new DomainException("Dish not found"));
         mDishRepository.delete(dish);
         log.info("Dish with %s was deleted with (id) %s!".formatted(dish.getName(), dish.getId()));
+    }
+
+    public Dish findDishNyId(UUID dishId) {
+        return mDishRepository.findById(dishId).orElseThrow(() -> new DomainException("Dish not found"));
     }
 }
 
