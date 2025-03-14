@@ -26,8 +26,7 @@ public class Ingredient {
 
     private String name;
 
-    @ManyToMany(mappedBy = "ingredients")
-    private Set<Dish> dishes;
+
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Store store;

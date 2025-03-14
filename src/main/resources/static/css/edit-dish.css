@@ -34,6 +34,11 @@ header h2 {
     color: #f58726;
 
 }
+
+#search-btn {
+    width: 1vw;
+}
+
 #search-tab::placeholder {
     color: #f58726;
 }
@@ -45,13 +50,9 @@ header h2 {
     border-bottom-right-radius: 3em;
 }
 
-.box-searching > a {
 
-    padding: 1em;
-}
-
-.fas {
-    color: white;
+#search-btn > .fas {
+    color: black;
 
 }
 
@@ -74,7 +75,8 @@ body {
 }
 
 .search-box {
-    margin-bottom: 20px;
+    margin: 3em 0 3em 0;
+
 }
 
 .search-box input {
@@ -136,10 +138,23 @@ button {
 .add-btn {
     background: #28a745;
     color: white;
+    margin: 1em 0 1em 0;
 }
 
 .add-btn:hover {
     background: #218838;
+}
+
+#delete-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#wrapper-shop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .remove-btn {
@@ -190,18 +205,35 @@ li {
     margin: 5px;
 }
 
+#save-wrapper-btn {
+    display: flex;
+    justify-content: center;  /* Horizontally centers the button */
+    margin-top: 20px;  /* Adds some spacing above the button */
+}
+
 .save-btn {
     background: #ffbc03;
     color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .save-btn:hover {
-    background: #f58726;
+    background-color: #f58726;
 }
 
 .delete-btn {
+    margin-top: 1em;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
     background: red;
     color: white;
+    font-size: 1em;
 }
 
 .delete-btn:hover {
@@ -220,6 +252,11 @@ li {
 .shop-btn {
     background: #007bff;
     color: white;
+    font-size: 1em;
+    margin-top: 1em;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
 }
 
 .shop-btn:hover {

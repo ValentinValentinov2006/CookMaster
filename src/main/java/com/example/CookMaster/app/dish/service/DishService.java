@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -62,28 +63,20 @@ public class DishService {
 
     private void addDishToIngredients(Dish dish, Set<Ingredient> ingredients) {
         for (Ingredient ingredient : ingredients) {
-            ingredient.getDishes().add(dish);
+
             mIngredientService.getmIngredientRepository().save(ingredient);
         }
     }
     private Set<Ingredient> convertStringsToIngredients(Set<String> ingredientNames) {
         Set<Ingredient> ingredientSet = new HashSet<>();
 
-
         for (String name : ingredientNames) {
             Optional<Ingredient> ingredientOpt = mIngredientService.getmIngredientRepository().findByName(name);
-            Ingredient ingredient;
-
-
-            if (ingredientOpt.isEmpty()) {
-                ingredient = new Ingredient();
-                ingredient.setName(name);
-                ingredient.setDishes(new HashSet<>());
-            } else {
-                ingredient = ingredientOpt.get();
-            }
-
-
+            Ingredient ingredient = ingredientOpt.orElseGet(() -> {
+                Ingredient newIngredient = new Ingredient();
+                newIngredient.setName(name);
+                return mIngredientService.getmIngredientRepository().save(newIngredient);
+            });
 
             ingredientSet.add(ingredient);
         }
@@ -92,20 +85,28 @@ public class DishService {
     }
 
 
-
     public Dish findByName(String name) {
         Dish dish = mDishRepository.findByNameIgnoreCase(name).orElseThrow(() -> new DomainException("Dish not found"));
         return dish;
     }
 
 
-    @Transactional
+
     public void editDishRequest(UUID id, EditDishRequest request) {
-        Dish dish = mDishRepository.findById(id).orElseThrow(() -> new DomainException("Dish not found"));
-        System.out.println(request);
+        Dish dish = mDishRepository.findById(id)
+                .orElseThrow(() -> new DomainException("Dish not found"));
+
         dish.setName(request.getDishName());
         dish.setDescription(request.getDishDescription());
         dish.setType(request.getDishType());
+
+        if (request.getIngredients() != null) {
+            Set<Ingredient> updatedIngredients = convertStringsToIngredients(request.getIngredients());
+            dish.setIngredients(updatedIngredients);
+        } else {
+            dish.setIngredients(new HashSet<>());
+        }
+
         mDishRepository.save(dish);
     }
 

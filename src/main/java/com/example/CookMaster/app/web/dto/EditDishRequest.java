@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Builder
@@ -24,5 +25,5 @@ public class EditDishRequest {
     private String dishDescription;
 
 
-    private Set<Ingredient> ingredients;
+    private Set<String> ingredients;
 }

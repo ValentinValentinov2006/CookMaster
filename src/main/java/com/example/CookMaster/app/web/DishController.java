@@ -78,11 +78,11 @@ public class DishController {
 
         if (name != null && !name.isEmpty()) {
             var dish = dishService.findByName(name);
-            Set<Ingredient> ingredients = dish.getIngredients();
-            System.out.println("Ingredients: " + ingredients);
+
+
             if (dish != null) {
                 model.addObject("dish", dish);
-                model.addObject("ingredients", ingredients);
+
                 model.addObject("dishRequest", DtoMapper.mapDishToEditDishRequest(dish));
             } else {
                 model.addObject("notFound", true);
@@ -94,11 +94,14 @@ public class DishController {
 
 
     @PatchMapping("/update/{id}")
-    public ModelAndView updateUserDishRequest(@PathVariable UUID id, @Valid  EditDishRequest request, BindingResult bindingResult) {
-        System.out.println(request);
+    public ModelAndView updateUserDishRequest(@PathVariable UUID id, @Valid EditDishRequest request, BindingResult bindingResult) {
+        System.out.println("Request -> "+request);
+
+
         if (bindingResult.hasErrors()) {
-            System.out.println();
-            return new ModelAndView("edit-dish");
+            ModelAndView model = new ModelAndView("edit-dish");
+            model.addObject("errors", bindingResult.getAllErrors());
+            return model;
         }
 
         dishService.editDishRequest(id, request);
