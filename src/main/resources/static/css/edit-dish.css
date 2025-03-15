@@ -240,6 +240,18 @@ li {
     background: darkred;
 }
 
+.wrapper-assign {
+    margin: 2em 0 2em 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#assign-btn {
+    background: #ffbc03;
+    color: white;
+}
+
 .fav-btn {
     background: #ff0077;
     color: white;
