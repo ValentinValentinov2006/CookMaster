@@ -1,7 +1,7 @@
 package com.example.CookMaster.app.dish.model;
 
 import com.example.CookMaster.app.ingredient.model.Ingredient;
-import com.example.CookMaster.app.shopping.model.Shopping;
+
 import com.example.CookMaster.app.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -53,8 +53,7 @@ public class Dish {
     )
     private Set<Ingredient> ingredients;
 
-    @ManyToOne
-    private Shopping shopping;
+
 
 
 }

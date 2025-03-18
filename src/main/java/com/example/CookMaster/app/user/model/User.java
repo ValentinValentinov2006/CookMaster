@@ -1,7 +1,7 @@
 package com.example.CookMaster.app.user.model;
 
 import com.example.CookMaster.app.dish.model.Dish;
-import com.example.CookMaster.app.shopping.model.Shopping;
+
 import com.example.CookMaster.app.store.model.Store;
 import jakarta.persistence.*;
 import lombok.*;
@@ -52,8 +52,7 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<Dish> dishes;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<Shopping> shopping;
+
 
     @ManyToMany
     @JoinTable(

@@ -73,26 +73,39 @@
 
     <button class="shop-btn" onclick="openModal()">Add to <i class="fas fa-shopping-cart"></i></button>
 
-    <div id="storeModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Assign Ingredients to Stores</h2>
-            <label for="store-select">Select Store:</label>
-            <select id="store-select">
-                <option value="Store 1">Store 1</option>
-                <option value="Store 2">Store 2</option>
-                <option value="Store 3">Store 3</option>
-            </select>
-            <label for="ingredient-select">Select Ingredient:</label>
-            <select id="ingredient-select"></select>
-            <div class="wrapper-assign">
-                <button id="assign-btn" onclick="assignIngredientToStore()">Assign</button>
-            </div>
+    <form id="assignForm" th:action="@{/shopping-list/new}" th:method="POST">
+        <input type="hidden" name="_method" value="PATCH"/>
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+        <div id="storeModal" class="modal" th:if="${stores}">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Assign Ingredients to Stores</h2>
 
-            <h3>Assigned Ingredients</h3>
-            <ul id="assigned-list"></ul>
+                <label for="store-select">Select Store:</label>
+                <select id="store-select">
+                    <option th:each="store : ${stores}" th:value="${store.name}" th:text="${store.name}"></option>
+                </select>
+
+                <label for="ingredient-select">Select Ingredient:</label>
+                <select id="ingredient-select"></select>
+
+                <div class="wrapper-assign">
+                    <button type="button" id="assign-btn" onclick="assignIngredientToStore()">Assign</button>
+                </div>
+
+                <h3>Assigned Ingredients</h3>
+                <ul id="assigned-list"></ul>
+
+
+                <input type="hidden" name="assignments" id="assignments-input">
+
+                <div class="submit-wrapper-btn">
+                    <button type="submit">Submit</button>
+                </div>
+
+            </div>
         </div>
-    </div>
+    </form>
 
 </div>
 
@@ -106,7 +119,7 @@
             const list = document.getElementById("ingredients-list");
             const li = document.createElement("li");
 
-            // Създаваме HTML за съставката и бутон за премахване
+
             li.innerHTML = `<span>${ingredient}</span>
                             <input type="hidden" name="ingredients" value="${ingredient}"/>
                             <button type="button" class="remove-btn" onclick="removeIngredient(this)">X</button>`;
@@ -135,7 +148,7 @@
 
 
         ingredientsList.forEach(li => {
-            let ingredient = li.textContent.replace("X", "").trim(); // Премахваме "X" от текста
+            let ingredient = li.textContent.replace("X", "").trim();
             let option = document.createElement("option");
             option.value = ingredient;
             option.textContent = ingredient;
@@ -160,17 +173,22 @@
             let ingredientSelect = document.getElementById("ingredient-select");
             ingredientSelect.querySelector(`option[value="${ingredient}"]`).remove()
         }
+
+
     }
 
     function updateAssignedList() {
         const assignedList = document.getElementById("assigned-list");
         assignedList.innerHTML = "";
+        let assignmentsArray = [];
 
         for (let store in storeAssignments) {
             let li = document.createElement("li");
             li.innerHTML = `<strong>${store}:</strong> ${storeAssignments[store].join(", ")}`;
             assignedList.appendChild(li);
+            assignmentsArray.push(store + ":" + storeAssignments[store].join(","));
         }
+        document.getElementById("assignments-input").value = assignmentsArray.join(";");
     }
 </script>
 

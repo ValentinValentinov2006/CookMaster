@@ -1,12 +1,14 @@
 package com.example.CookMaster.app.web;
 
-import com.example.CookMaster.app.ingredient.model.Ingredient;
-import com.example.CookMaster.app.ingredient.service.IngredientService;
+
+import com.example.CookMaster.app.security.AuthenticationMetadata;
 import com.example.CookMaster.app.store.service.StoreService;
+import com.example.CookMaster.app.user.model.User;
 import com.example.CookMaster.app.user.service.UserService;
 import com.example.CookMaster.app.web.dto.CreateStoreRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +37,8 @@ public class StoreController {
     }
 
     @PostMapping("/new")
-    public ModelAndView postStoreDetailsRequest(@Valid CreateStoreRequest createStoreRequest, BindingResult bindingResult){
+    public ModelAndView postStoreDetailsRequest(@Valid CreateStoreRequest createStoreRequest, BindingResult bindingResult,
+                                                @AuthenticationPrincipal AuthenticationMetadata authenticationMetadata) {
        if (bindingResult.hasErrors()) {
            ModelAndView modelStore = new ModelAndView();
            modelStore.setViewName("store");
@@ -43,8 +46,9 @@ public class StoreController {
            modelStore.addObject("errors", bindingResult.getAllErrors());
            return modelStore;
        }
-        System.out.println(createStoreRequest);
-       storeService.createStore(createStoreRequest);
+       System.out.println(createStoreRequest);
+        User user = userService.getById(authenticationMetadata.getUserId());
+       storeService.createStore(createStoreRequest, user);
 
         return new ModelAndView("redirect:/profile");
     }

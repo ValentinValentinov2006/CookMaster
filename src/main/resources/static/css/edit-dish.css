@@ -287,6 +287,18 @@ li {
     padding-top: 60px;
 }
 
+.submit-wrapper-btn {
+    display: flex;
+    justify-items: center;
+    text-align: center;
+    justify-content: center;
+    margin-top: 2em;
+}
+
+.submit-wrapper-btn > button {
+    background: #ffbc03;
+    color: white;
+}
 
 .modal-content {
     background-color: #fff;

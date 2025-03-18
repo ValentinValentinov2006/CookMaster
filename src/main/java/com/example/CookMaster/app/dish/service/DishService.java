@@ -79,6 +79,7 @@ public class DishService {
             Ingredient ingredient = ingredientOpt.orElseGet(() -> {
                 Ingredient newIngredient = new Ingredient();
                 newIngredient.setName(name);
+                newIngredient.setIsBought(false);
                 return mIngredientService.getmIngredientRepository().save(newIngredient);
             });
 

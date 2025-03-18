@@ -73,17 +73,24 @@ public class DishController {
     }
 
     @GetMapping("/searching")
-    public ModelAndView searchDishRequest(@RequestParam(name = "name", required = false) String name) {
+    public ModelAndView searchDishRequest(@RequestParam(name = "name", required = false) String name,
+    @AuthenticationPrincipal AuthenticationMetadata authenticationMetadata) {
         ModelAndView model = new ModelAndView("edit-dish");
+        User user = userService.getById(authenticationMetadata.getUserId());
 
         if (name != null && !name.isEmpty()) {
             var dish = dishService.findByName(name);
 
 
             if (dish != null) {
-                model.addObject("dish", dish);
 
+                model.addObject("dish", dish);
                 model.addObject("dishRequest", DtoMapper.mapDishToEditDishRequest(dish));
+                if(!user.getStores().isEmpty()) {
+                    System.out.println("User stores/" + user.getStores());
+                     model.addObject("stores",user.getStores());
+                }
+
             } else {
                 model.addObject("notFound", true);
             }

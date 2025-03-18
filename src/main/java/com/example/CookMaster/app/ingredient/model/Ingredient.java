@@ -26,7 +26,7 @@ public class Ingredient {
 
     private String name;
 
-
+    private Boolean isBought;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Store store;

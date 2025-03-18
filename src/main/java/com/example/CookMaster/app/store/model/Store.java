@@ -31,6 +31,7 @@ public class Store {
     @ManyToMany(mappedBy = "stores")
     private Set<User> users;
 
-    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
+    //
+    @OneToMany(mappedBy = "store", fetch = FetchType.EAGER)
     private Set<Ingredient> ingredients;
 }
