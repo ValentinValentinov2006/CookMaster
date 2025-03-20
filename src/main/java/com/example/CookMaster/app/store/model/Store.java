@@ -34,4 +34,36 @@ public class Store {
     //
     @OneToMany(mappedBy = "store", fetch = FetchType.EAGER)
     private Set<Ingredient> ingredients;
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Store{")
+                .append("id=").append(id)
+                .append(", name='").append(name).append('\'')
+                .append(", address='").append(address).append('\'')
+                .append(", phone='").append(phone).append('\'')
+                .append(", notes='").append(notes).append('\'')
+                .append(", ingredients=[");
+
+        // Логваме всяка съставка поотделно
+        if (ingredients != null && !ingredients.isEmpty()) {
+            for (Ingredient ingredient : ingredients) {
+                builder.append(ingredient.getName()).append(", ");
+            }
+            builder.delete(builder.length() - 2, builder.length());  // Премахваме последната запетая и интервал
+        }
+        builder.append("], users=[");
+
+        // Логваме всеки потребител
+        if (users != null && !users.isEmpty()) {
+            for (User user : users) {
+                builder.append(user.getUsername()).append(", ");
+            }
+            builder.delete(builder.length() - 2, builder.length());  // Премахваме последната запетая и интервал
+        }
+        builder.append("]}");
+
+        return builder.toString();
+    }
 }

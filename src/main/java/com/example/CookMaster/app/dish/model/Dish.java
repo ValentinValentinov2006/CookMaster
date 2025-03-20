@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -53,7 +54,10 @@ public class Dish {
     )
     private Set<Ingredient> ingredients;
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
 
 
 }

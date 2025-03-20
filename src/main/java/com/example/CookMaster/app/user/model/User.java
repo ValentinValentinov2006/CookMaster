@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -61,5 +62,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "store_id")
     )
     private Set<Store> stores;
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username);
+    }
 }

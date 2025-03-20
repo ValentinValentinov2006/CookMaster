@@ -1,5 +1,6 @@
 package com.example.CookMaster.app.store.service;
 
+import com.example.CookMaster.app.ingredient.model.Ingredient;
 import com.example.CookMaster.app.ingredient.service.IngredientService;
 import com.example.CookMaster.app.store.model.Store;
 import com.example.CookMaster.app.store.repository.StoreRepository;
@@ -9,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,6 +46,7 @@ public class StoreService {
                  .address(createStoreRequest.getAddress())
                  .phone(createStoreRequest.getPhoneNumber())
                  .notes(createStoreRequest.getNotes())
+                .ingredients(new HashSet<>())
                 .users(new HashSet<>())
                 .build();
     }
@@ -52,8 +54,8 @@ public class StoreService {
     public void updateStoresAndIngredients(String assignments) {
         Pattern pattern = Pattern.compile(REGEX);
         Matcher matcher = pattern.matcher(assignments);
-        if (matcher.matches()) {
-            parseAssignments(matcher);
+        if (matcher.find()) {
+            parseAssignments(assignments);
         } else {
             log.error("Invalid assignments format [%s]".formatted(assignments));
             
@@ -61,7 +63,35 @@ public class StoreService {
         log.info("%s".formatted(assignments));
     }
 
-    private void parseAssignments(Matcher matcher) {
+    private void parseAssignments(String assignments) {
+        Pattern pattern = Pattern.compile(REGEX);
+        Matcher matcher = pattern.matcher(assignments);
 
+        while (matcher.find()) {
+            String storeName = matcher.group(1);
+            String[] ingredientsArray = matcher.group(2).split(",");
+
+            Store store = storeRepository.findByName(storeName);
+
+            for (String ingredientName : ingredientsArray) {
+                Ingredient ingredient = ingredientService.getmIngredientRepository().getIngredientByName(ingredientName);
+                log.info("Ingredient with name [%s]".formatted(ingredientName));
+                store.getIngredients().add(ingredient);
+            }
+
+
+            storeRepository.save(store);
+            storeRepository.flush();
+            log.info("Store after saving: {}", store);
+
+        }
+    }
+
+    public Set<Store> getAllStores() {
+        return new HashSet<>(storeRepository.findAll());
+    }
+
+    public Optional<Store> findByID(UUID storeId) {
+       return storeRepository.findById(storeId);
     }
 }

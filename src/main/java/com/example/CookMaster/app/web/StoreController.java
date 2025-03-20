@@ -2,17 +2,22 @@ package com.example.CookMaster.app.web;
 
 
 import com.example.CookMaster.app.security.AuthenticationMetadata;
+import com.example.CookMaster.app.store.model.Store;
 import com.example.CookMaster.app.store.service.StoreService;
 import com.example.CookMaster.app.user.model.User;
 import com.example.CookMaster.app.user.service.UserService;
 import com.example.CookMaster.app.web.dto.CreateStoreRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("store")

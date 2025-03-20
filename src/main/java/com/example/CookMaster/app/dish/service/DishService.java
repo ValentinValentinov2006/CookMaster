@@ -37,7 +37,7 @@ public class DishService {
     }
 
     @Transactional
-    public Dish createDish(CreateDishRequest request, User user) {
+    public void createDish(CreateDishRequest request, User user) {
 
         DishType dishType = request.getDishType();
 
@@ -60,7 +60,7 @@ public class DishService {
         addDishToIngredients(dish, ingredients);
         mDishRepository.save(dish);
 
-        return dish;
+
     }
 
 
@@ -91,8 +91,7 @@ public class DishService {
 
 
     public Dish findByName(String name) {
-        Dish dish = mDishRepository.findByNameIgnoreCase(name).orElseThrow(() -> new DomainException("Dish not found"));
-        return dish;
+        return mDishRepository.findByNameIgnoreCase(name).orElseThrow(() -> new DomainException("Dish not found"));
     }
 
 

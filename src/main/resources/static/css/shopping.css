@@ -1,0 +1,132 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Irish Grover', cursive;
+    background-color: #f5f5f5;
+    text-align: center;
+    padding: 20px;
+}
+
+header {
+    width: 97vw;
+    text-align: center;
+    padding: 1.5em 0;
+    background: linear-gradient(150deg, #ffbc03, #f58726);
+}
+
+header h1 {
+    font-size: 3em;
+    color: white;
+}
+
+header h2 {
+    font-size: 1.5em;
+    color: rgb(255, 255, 67);
+}
+
+.wrapper-card {
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.wrapper-shopping {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.dish-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.store-name {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #f58726;
+}
+
+h4 {
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background: #fff7e6;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+#dish-name {
+    font-size: 3em;
+}
+
+li:hover {
+    background: #ffe3c1;
+}
+
+.fa-check {
+    color: green;
+    font-size: 1.4em;
+    transition: transform 0.3s ease-in-out;
+}
+
+.fa-check:hover {
+    transform: scale(1.2);
+}
+
+.ingredient-checkbox {
+    margin-right: 10px;
+}
+
+.actions {
+    margin-top: 10px;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+#store {
+    border: none;
+    border-bottom: 2px solid #f58726;
+    margin: 3em 0 3em 0;
+}
+
+.store-info {
+    background: #fff7e6;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.store-info p {
+    margin: 5px 0;
+    color: #333;
+}
