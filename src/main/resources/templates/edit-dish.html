@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Dish</title>
     <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="/css/edit-dish.css">
 </head>
 <body>
@@ -25,6 +26,7 @@
             </button>
         </div>
     </div>
+
 </form>
 
 <div class="card" th:if="${dishRequest}">
@@ -68,10 +70,13 @@
     <form id="delete-form" th:action="@{/dish/delete/{id}(id=${dish.id})}" method="post">
         <input type="hidden" name="_method" value="DELETE"/>
         <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
-        <button type="submit" class="delete-btn">Delete Dish</button>
+        <button type="submit" class="delete-btn">Delete</button>
     </form>
 
-    <button class="shop-btn" onclick="openModal()">Add to <i class="fas fa-shopping-cart"></i></button>
+    <div id="add-to-wrapper">
+        <button class="shop-btn" onclick="openModal()">Add to <i class="fas fa-shopping-cart"></i></button>
+    </div>
+
 
     <form id="assignForm" th:action="@{/shopping-list/new}" th:method="POST">
         <input type="hidden" name="_method" value="PATCH"/>
