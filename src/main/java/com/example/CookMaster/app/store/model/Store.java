@@ -32,7 +32,7 @@ public class Store {
     private Set<User> users;
 
     //
-    @OneToMany(mappedBy = "store", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Ingredient> ingredients;
 
     @Override
@@ -46,12 +46,12 @@ public class Store {
                 .append(", notes='").append(notes).append('\'')
                 .append(", ingredients=[");
 
-        // Логваме всяка съставка поотделно
+
         if (ingredients != null && !ingredients.isEmpty()) {
             for (Ingredient ingredient : ingredients) {
                 builder.append(ingredient.getName()).append(", ");
             }
-            builder.delete(builder.length() - 2, builder.length());  // Премахваме последната запетая и интервал
+            builder.delete(builder.length() - 2, builder.length());
         }
         builder.append("], users=[");
 
@@ -60,7 +60,7 @@ public class Store {
             for (User user : users) {
                 builder.append(user.getUsername()).append(", ");
             }
-            builder.delete(builder.length() - 2, builder.length());  // Премахваме последната запетая и интервал
+            builder.delete(builder.length() - 2, builder.length());
         }
         builder.append("]}");
 

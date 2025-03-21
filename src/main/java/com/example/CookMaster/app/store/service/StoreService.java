@@ -1,11 +1,13 @@
 package com.example.CookMaster.app.store.service;
 
+import com.example.CookMaster.app.exception.DomainException;
 import com.example.CookMaster.app.ingredient.model.Ingredient;
 import com.example.CookMaster.app.ingredient.service.IngredientService;
 import com.example.CookMaster.app.store.model.Store;
 import com.example.CookMaster.app.store.repository.StoreRepository;
 import com.example.CookMaster.app.user.model.User;
 import com.example.CookMaster.app.web.dto.CreateStoreRequest;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,7 +52,7 @@ public class StoreService {
                 .users(new HashSet<>())
                 .build();
     }
-
+    @Transactional
     public void updateStoresAndIngredients(String assignments) {
         Pattern pattern = Pattern.compile(REGEX);
         Matcher matcher = pattern.matcher(assignments);
@@ -63,6 +65,7 @@ public class StoreService {
         log.info("%s".formatted(assignments));
     }
 
+
     private void parseAssignments(String assignments) {
         Pattern pattern = Pattern.compile(REGEX);
         Matcher matcher = pattern.matcher(assignments);
@@ -73,15 +76,20 @@ public class StoreService {
 
             Store store = storeRepository.findByName(storeName);
 
+
+
             for (String ingredientName : ingredientsArray) {
                 Ingredient ingredient = ingredientService.getmIngredientRepository().getIngredientByName(ingredientName);
-                log.info("Ingredient with name [%s]".formatted(ingredientName));
+
+
                 store.getIngredients().add(ingredient);
+                ingredient.setStore(store);
             }
 
 
-            storeRepository.save(store);
-            storeRepository.flush();
+
+            storeRepository.saveAndFlush(store);
+
             log.info("Store after saving: {}", store);
 
         }
@@ -91,7 +99,20 @@ public class StoreService {
         return new HashSet<>(storeRepository.findAll());
     }
 
-    public Optional<Store> findByID(UUID storeId) {
-       return storeRepository.findById(storeId);
+
+    public void deleteBoughtIngredients(String name) {
+        Store store = storeRepository.findByName(name);
+
+        if (store == null) {
+            throw new DomainException("Store not found with name: " + name);
+        }
+
+        for (Ingredient ingredient : store.getIngredients()) {
+            ingredient.setStore(null);
+        }
+
+
+        store.getIngredients().clear();
+        storeRepository.saveAndFlush(store);
     }
 }

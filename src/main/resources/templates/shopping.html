@@ -22,22 +22,30 @@
                 <h4 th:text="${store.name}">Store Name</h4>
 
                 <div class="store-info">
-                    <p><strong>Store:</strong> <span th:text="${store.name}"></span></p>
-                    <p><strong>Address:</strong> <span th:text="${store.address}"></span></p>
-                    <p><strong>Phone:</strong> <span th:text="${store.phone}"></span></p>
+
+                    <p><strong>Address:</strong> <span th:text="${store.address != null and store.address != '' ? store.address : 'Not selected'}"></span></p>
+                    <p><strong>Phone:</strong> <span th:text="${store.phone != null and store.phone != '' ? store.phone : 'Not selected'}"></span></p>
+                    <p><strong>Notes:</strong> <span th:text="${store.notes != null and store.notes != '' ? store.notes : 'Not selected'}"></span></p>
                 </div>
 
 
                 <ul id="ingredients-list">
                     <th:block th:each="ingredient : ${store.ingredients}">
-                        <li th:text="${ingredient.name}">Ingredient</li>
+                        <li th:text="${ingredient.name}"></li>
+
                     </th:block>
                     <li th:if="${#lists.isEmpty(store.ingredients)}">No ingredients available</li>
                 </ul>
 
-                <div class="actions">
-                    <button id="mark-bought" onclick="markAsBought()">Bought</button>
-                </div>
+                <form id="form" th:action="@{/shopping/products/purchase}"  th:method="POST">
+                    <div class="actions">
+                        <input type="hidden" name="_method" value="PATCH"/>
+                        <input type="hidden" name="storeName" th:value="${store.name}">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                        <button type="submit" id="mark-bought" onclick="markAsBought()">Bought</button>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>
@@ -47,6 +55,23 @@
     function markAsBought() {
         alert("Item marked as bought!");
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const ingredients = document.querySelectorAll("#ingredients-list li");
+
+        ingredients.forEach(li => {
+
+            if (li.textContent !== "No ingredients available"){
+                li.addEventListener("click", function () {
+
+                    this.classList.toggle("bought");
+                });
+            }
+
+        });
+    });
+
 </script>
 
 </body>

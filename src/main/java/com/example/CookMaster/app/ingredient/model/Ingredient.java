@@ -17,6 +17,7 @@ import jakarta.persistence.Entity;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+
 public class Ingredient {
 
     @Id
@@ -28,6 +29,6 @@ public class Ingredient {
 
     private Boolean isBought;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Store store;
 }
