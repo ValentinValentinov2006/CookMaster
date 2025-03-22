@@ -1,0 +1,128 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Irish Grover', cursive;
+    background-color: #f5f5f5;
+    height: 100vh;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2em;
+    flex-direction: column;
+    gap: 1em;
+}
+
+header {
+    width: 100vw;
+    text-align: center;
+    padding: 1.5em 0;
+    background: linear-gradient(150deg, #ffbc03, #f58726);
+}
+
+header h1 {
+    font-size: 3em;
+    color: white;
+}
+
+header h2 {
+    font-size: 1.5em;
+    color: rgb(255, 255, 67);
+}
+
+.card {
+    background: white;
+    padding: 2em;
+    border-radius: 1.2em;
+    box-shadow: 0 0.4em 1em rgba(0, 0, 0, 0.1);
+    width: 40em;
+    display: flex;
+
+    gap: 1.5em;
+}
+
+label {
+    text-align: start;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.card {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 40%;
+
+    margin: 3em 0 3em 0;
+}
+
+select, button {
+    padding: 0.8em;
+    border: 0.1em solid #ccc;
+    border-radius: 0.8em;
+    font-size: 1em;
+}
+
+button {
+    background-color: #ff9003;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    border: none;
+}
+
+button:hover {
+    background-color: #f58726;
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: 90%;
+        padding: 1.5em;
+    }
+
+    input, select, button {
+        font-size: 0.9em;
+        padding: 0.6em;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 2em;
+    }
+
+    header h2 {
+        font-size: 1.2em;
+    }
+
+    .card {
+        width: 95%;
+        padding: 1.2em;
+    }
+
+    label {
+        font-size: 1em;
+    }
+
+    input, select, button {
+        font-size: 0.85em;
+        padding: 0.5em;
+    }
+}

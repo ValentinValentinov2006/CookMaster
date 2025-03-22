@@ -12,4 +12,6 @@ public interface DishRepository extends JpaRepository<Dish, UUID> {
 
 
     Optional<Dish> findByNameIgnoreCase(String name);
+
+
 }

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu of the Day</title>
+    <link rel="stylesheet" type="text/css" href="/css/menu.css">
+    <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<header>
+    <h1>CookMaster</h1>
+    <h2 id="menu-title">Menu of the Day</h2>
+</header>
+
+<main>
+    <div class="card">
+        <div class="menu-container">
+            <label>Breakfast:</label>
+            <select id="breakfast">
+                <option value="pancakes">Pancakes</option>
+                <option value="omelette">Omelette</option>
+                <option value="smoothie">Smoothie</option>
+            </select>
+
+            <label>Lunch:</label>
+            <select id="lunch">
+                <option value="sandwich">Sandwich</option>
+                <option value="salad">Salad</option>
+                <option value="soup">Soup</option>
+            </select>
+
+            <label>Dinner:</label>
+            <select id="dinner">
+                <option value="pasta">Pasta</option>
+                <option value="steak">Steak</option>
+                <option value="pizza">Pizza</option>
+            </select>
+        </div>
+
+
+        <button id="save-menu">Save Menu</button>
+    </div>
+</main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const dayIndex = urlParams.get("day");
+        const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+        document.getElementById("menu-title").textContent = `${daysOfWeek[dayIndex]} Menu`;
+
+
+        const savedMenu = JSON.parse(localStorage.getItem(`menu-${dayIndex}`)) || {};
+        document.getElementById("breakfast").value = savedMenu.breakfast || "panecakes";
+        document.getElementById("lunch").value = savedMenu.lunch || "sandwich";
+        document.getElementById("dinner").value = savedMenu.dinner || "pasta";
+
+
+        document.getElementById("save-menu").addEventListener("click", function() {
+            const selectedMenu = {
+                breakfast: document.getElementById("breakfast").value,
+                lunch: document.getElementById("lunch").value,
+                dinner: document.getElementById("dinner").value
+            };
+
+            localStorage.setItem(`menu-${dayIndex}`, JSON.stringify(selectedMenu));
+            alert("Menu is ready!");
+        });
+    });
+
+</script>
+
+</body>
+</html>

@@ -37,7 +37,9 @@ public class ShoppingController {
     @GetMapping("/shopping")
     public ModelAndView getShoppingListRequest(){
         ModelAndView modelAndView = new ModelAndView("shopping");
+        storeService.removeUnlinkedIngredients();
         var stores = storeService.getAllStores();
+
         if (!stores.isEmpty()) {
             log.info("Store ingredients: {}", stores.iterator().next().getIngredients());
 

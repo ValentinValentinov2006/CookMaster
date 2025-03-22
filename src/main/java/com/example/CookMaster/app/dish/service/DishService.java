@@ -7,6 +7,7 @@ import com.example.CookMaster.app.dish.repository.DishRepository;
 import com.example.CookMaster.app.exception.DomainException;
 import com.example.CookMaster.app.ingredient.model.Ingredient;
 import com.example.CookMaster.app.ingredient.service.IngredientService;
+import com.example.CookMaster.app.store.service.StoreService;
 import com.example.CookMaster.app.user.model.User;
 import com.example.CookMaster.app.web.dto.CreateDishRequest;
 import com.example.CookMaster.app.web.dto.EditDishRequest;
@@ -14,13 +15,14 @@ import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
 
 @Slf4j
 @Service
@@ -29,11 +31,13 @@ public class DishService {
 
     private final DishRepository mDishRepository;
     private final IngredientService mIngredientService;
+    private final StoreService mStoreService;
 
     @Autowired
-    public DishService(DishRepository mDishRepository, IngredientService mIngredientService) {
+    public DishService(DishRepository mDishRepository, @Lazy IngredientService mIngredientService, StoreService mStoreService) {
         this.mDishRepository = mDishRepository;
         this.mIngredientService = mIngredientService;
+        this.mStoreService = mStoreService;
     }
 
     @Transactional
@@ -57,7 +61,7 @@ public class DishService {
         dish.setCreatedAt(LocalDate.now());
 
 
-        addDishToIngredients(dish, ingredients);
+        addDishToIngredients(ingredients);
         mDishRepository.save(dish);
 
 
@@ -65,10 +69,10 @@ public class DishService {
 
 
 
-    private void addDishToIngredients(Dish dish, Set<Ingredient> ingredients) {
+    private void addDishToIngredients(Set<Ingredient> ingredients) {
         for (Ingredient ingredient : ingredients) {
 
-            mIngredientService.getmIngredientRepository().save(ingredient);
+            mIngredientService.saveIngredient(ingredient);
         }
     }
     private Set<Ingredient> convertStringsToIngredients(Set<String> ingredientNames) {
@@ -80,7 +84,7 @@ public class DishService {
                 Ingredient newIngredient = new Ingredient();
                 newIngredient.setName(name);
                 newIngredient.setIsBought(false);
-                return mIngredientService.getmIngredientRepository().save(newIngredient);
+                return mIngredientService.saveIngredientAndReturn(newIngredient);
             });
 
             ingredientSet.add(ingredient);
@@ -117,12 +121,30 @@ public class DishService {
 
         Dish dish = mDishRepository.findById(id).orElseThrow(() -> new DomainException("Dish not found"));
         mDishRepository.delete(dish);
+
         log.info("Dish with %s was deleted with (id) %s!".formatted(dish.getName(), dish.getId()));
     }
 
     public Dish findDishNyId(UUID dishId) {
         return mDishRepository.findById(dishId).orElseThrow(() -> new DomainException("Dish not found"));
     }
+
+    public boolean checkIsIngredientValid(String ingredientName) {
+
+        Set<Dish> dishes = new HashSet<>(mDishRepository.findAll());
+
+        for (Dish dish : dishes) {
+            boolean ingredientFound = dish.getIngredients().stream()
+                    .anyMatch(ingredient -> ingredient.getName().equals(ingredientName));
+
+            if (ingredientFound) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }
 
 
