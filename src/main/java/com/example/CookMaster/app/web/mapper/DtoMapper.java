@@ -1,10 +1,12 @@
 package com.example.CookMaster.app.web.mapper;
 
+import com.example.CookMaster.app.calendar.model.DayOfWeek;
+import com.example.CookMaster.app.calendar.model.Menu;
 import com.example.CookMaster.app.dish.model.Dish;
 import com.example.CookMaster.app.ingredient.model.Ingredient;
 import com.example.CookMaster.app.user.model.User;
-import com.example.CookMaster.app.web.dto.CreateDishRequest;
 import com.example.CookMaster.app.web.dto.EditDishRequest;
+import com.example.CookMaster.app.web.dto.MenuRequest;
 import com.example.CookMaster.app.web.dto.ProfileEditRequest;
 import lombok.experimental.UtilityClass;
 
@@ -36,5 +38,11 @@ public class DtoMapper {
         return ingredients.stream()
                 .map(Ingredient::getName)
                 .collect(Collectors.toSet());
+    }
+    public static Menu mapMenuRequestToMenu(MenuRequest request) {
+        Menu menu = new Menu();
+        menu.setDayOfWeek(DayOfWeek.valueOf(request.getDayOfWeek().toUpperCase()));
+
+        return menu;
     }
 }

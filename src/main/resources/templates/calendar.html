@@ -39,16 +39,16 @@
 
             let card = document.createElement("div");
             card.classList.add("day-card");
-            card.dataset.dayIndex = i;
+            card.dataset.dayName = dayName;
             card.innerHTML = `<h3>${dayName}</h3><p>${formattedDate}</p>`;
-            card.addEventListener("click", () => openMenu(i));
+            card.addEventListener("click", () => openMenu(dayName));
 
             weekContainer.appendChild(card);
         }
     });
 
-    function openMenu(dayIndex) {
-        window.location.href = `menu.html?day=${dayIndex}`;
+    function openMenu(dayName) {
+        window.location.href = `/menu?day=${dayName}`;
     }
 
 </script>

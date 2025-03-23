@@ -5,6 +5,7 @@ import com.example.CookMaster.app.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -14,23 +15,30 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Calendar {
+public class Menu {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Enumerated(EnumType.STRING)
+    private DayOfWeek dayOfWeek;
+
     @ManyToOne
-    @JoinColumn(name = "dish_id", nullable = false)
-    private Dish dish;
+    @JoinColumn(name = "breakfast_id")
+    private Dish breakfast;
 
+    @ManyToOne
+    @JoinColumn(name = "lunch_id")
+    private Dish lunch;
 
-    private String dayOfWeek;
+    @ManyToOne
+    @JoinColumn(name = "dinner_id")
+    private Dish dinner;
 
-
-    private String time;
+    private LocalDate date;
 }

@@ -9,6 +9,7 @@ import com.example.CookMaster.app.ingredient.model.Ingredient;
 import com.example.CookMaster.app.ingredient.service.IngredientService;
 import com.example.CookMaster.app.store.service.StoreService;
 import com.example.CookMaster.app.user.model.User;
+import com.example.CookMaster.app.user.service.UserService;
 import com.example.CookMaster.app.web.dto.CreateDishRequest;
 import com.example.CookMaster.app.web.dto.EditDishRequest;
 import jakarta.transaction.Transactional;
@@ -18,10 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -32,12 +31,14 @@ public class DishService {
     private final DishRepository mDishRepository;
     private final IngredientService mIngredientService;
     private final StoreService mStoreService;
+    private final UserService userService;
 
     @Autowired
-    public DishService(DishRepository mDishRepository, @Lazy IngredientService mIngredientService, StoreService mStoreService) {
+    public DishService(DishRepository mDishRepository, @Lazy IngredientService mIngredientService, StoreService mStoreService, UserService userService) {
         this.mDishRepository = mDishRepository;
         this.mIngredientService = mIngredientService;
         this.mStoreService = mStoreService;
+        this.userService = userService;
     }
 
     @Transactional
@@ -145,6 +146,39 @@ public class DishService {
         return false;
     }
 
+    public  List<Dish> getBreakfastDishes( Set<Dish> userDishes) {
+        return takeAllDishesByTypeDish(DishType.BREAKFAST, userDishes);
+    }
+    public  List<Dish> getLunchDishes( Set<Dish> userDishes) {
+
+        return takeAllDishesByTypeDish(DishType.LUNCH, userDishes);
+    }
+    public List<Dish> getDinnerDishes(Set<Dish> userDishes) {
+        return takeAllDishesByTypeDish(DishType.DINNER, userDishes);
+    }
+
+    private List<Dish> takeAllDishesByTypeDish(DishType dishType, Set<Dish> userDishes) {
+        return userDishes.stream()
+                .filter(dish -> dish.getType().equals(dishType))
+                .collect(Collectors.toList());
+    }
+
+    public String convertDays(String dayName) {
+        if (dayName == null) {
+            throw new IllegalArgumentException("Day name cannot be null");
+        }
+        Map<String, String> daysMap = Map.of(
+                "Sun", "Sunday",
+                "Mon", "Monday",
+                "Tue", "Tuesday",
+                "Wed", "Wednesday",
+                "Thu", "Thursday",
+                "Fri", "Friday",
+                "Sat", "Saturday"
+        );
+
+        return daysMap.getOrDefault(dayName, "Unknown Day");
+    }
 }
 
 

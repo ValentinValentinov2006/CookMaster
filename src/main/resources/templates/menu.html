@@ -12,36 +12,49 @@
 
 <header>
     <h1>CookMaster</h1>
-    <h2 id="menu-title">Menu of the Day</h2>
+    <h2>Menu of the <span th:text="${dayName} ?: 'No data received'"></span></h2>
 </header>
 
 <main>
+
     <div class="card">
+        <form th:method="POST" th:action="@{/menu/new}" id="menu-form" th:object="${menuRequest}">
+            <input type="hidden" name="dayOfWeek" th:value="${dayName}" />
         <div class="menu-container">
+
             <label>Breakfast:</label>
-            <select id="breakfast">
-                <option value="pancakes">Pancakes</option>
-                <option value="omelette">Omelette</option>
-                <option value="smoothie">Smoothie</option>
+            <select th:field="*{breakfastId}">
+                <option value=""  >Choose...</option>
+                <option th:each="breakfast : ${breakfastDishes}" th:value="${breakfast.id}" th:text="${breakfast.name}"></option>
+
             </select>
+            <div th:if="${#fields.hasErrors('breakfastId')}" style="color: red;">
+                <p th:errors="*{breakfastId}"></p>
+            </div>
 
             <label>Lunch:</label>
-            <select id="lunch">
-                <option value="sandwich">Sandwich</option>
-                <option value="salad">Salad</option>
-                <option value="soup">Soup</option>
+            <select th:field="*{lunchId}">
+                <option value=""  >Choose...</option>
+                <option th:each="lunch : ${lunchDishes}" th:value="${lunch.id}" th:text="${lunch.name}"></option>
             </select>
-
+            <div th:if="${#fields.hasErrors('lunchId')}" style="color: red;">
+                <p th:errors="*{lunchId}"></p>
+            </div>
             <label>Dinner:</label>
-            <select id="dinner">
-                <option value="pasta">Pasta</option>
-                <option value="steak">Steak</option>
-                <option value="pizza">Pizza</option>
+            <select th:field="*{dinnerId}">
+                <option value="" >Choose...</option>
+                <option th:each="dinner : ${dinnerDishes}" th:value="${dinner.id}" th:text="${dinner.name}"></option>
             </select>
+            <div th:if="${#fields.hasErrors('dinnerId')}" style="color: red;">
+                <p th:errors="*{dinnerId}"></p>
+            </div>
         </div>
 
+        <div id="wrapper-btn">
+            <button type="submit" id="save-menu">Save Menu</button>
+        </div>
 
-        <button id="save-menu">Save Menu</button>
+        </form>
     </div>
 </main>
 
