@@ -1,6 +1,7 @@
 package com.example.CookMaster.app.web;
 
 
+import com.example.CookMaster.app.calendar.model.Menu;
 import com.example.CookMaster.app.calendar.service.MenuService;
 import com.example.CookMaster.app.dish.model.Dish;
 import com.example.CookMaster.app.dish.service.DishService;
@@ -39,19 +40,26 @@ public class MenuController {
      , @AuthenticationPrincipal AuthenticationMetadata authenticationMetadata) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("menu");
+
         User user = userService.getById(authenticationMetadata.getUserId());
         Set<Dish> dishes = user.getDishes();
-        System.out.println(dayName);
+
         String day = dishService.convertDays(dayName);
+        Menu menu =  menuService.findMenuByDay(day);
+
+
         List<Dish> breakfastDishes = dishService.getBreakfastDishes(dishes);
         List<Dish> lunchDishes = dishService.getLunchDishes(dishes);
         List<Dish> dinnerDishes = dishService.getDinnerDishes(dishes);
+
+        modelAndView.addObject("menu", menu);
         modelAndView.addObject("breakfastDishes", breakfastDishes);
         modelAndView.addObject("lunchDishes", lunchDishes);
         modelAndView.addObject("dinnerDishes", dinnerDishes);
         modelAndView.addObject("dayName", day);
         modelAndView.addObject("menuRequest", new MenuRequest());
-        System.out.println(day);
+
+
         return modelAndView;
     }
 

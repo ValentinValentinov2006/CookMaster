@@ -60,3 +60,12 @@ header h2 {
 .day-card p {
     font-size: 0.9em;
 }
+
+#cancel-btn {
+    background: #afafaf;
+    border-radius: 2em;
+    padding: 1em 3em 1em 3em;
+    color: white;
+    border: none;
+    margin-top: 6em;
+}

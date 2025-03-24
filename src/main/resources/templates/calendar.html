@@ -20,6 +20,12 @@
     <div class="week-container">
 
     </div>
+    <footer>
+        <a th:href ="@{/users/{id}/profile/go-back(id=${user.id})}">
+            <button id="cancel-btn">Go Back</button>
+        </a>
+    </footer>
+
 </main>
 
 <script>

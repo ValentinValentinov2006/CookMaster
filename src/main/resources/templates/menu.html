@@ -24,8 +24,14 @@
 
             <label>Breakfast:</label>
             <select th:field="*{breakfastId}">
-                <option value=""  >Choose...</option>
-                <option th:each="breakfast : ${breakfastDishes}" th:value="${breakfast.id}" th:text="${breakfast.name}"></option>
+                <option value="" th:if="${menu == null or menu.breakfast == null}">Choose...</option>
+                <option th:if="${menu != null and menu.breakfast != null}"
+                        th:value="${menu.breakfast.id}"
+                        th:text="${menu.breakfast.name}"
+                        style="background-color: gold;"
+                        th:selected="true">
+                </option>
+                <option th:each="breakfast : ${breakfastDishes}" th:value="${breakfast.id}" th:text="${breakfast.name}"  th:selected="${menu != null and menu.breakfast.id == breakfast.id}"></option>
 
             </select>
             <div th:if="${#fields.hasErrors('breakfastId')}" style="color: red;">
@@ -34,16 +40,28 @@
 
             <label>Lunch:</label>
             <select th:field="*{lunchId}">
-                <option value=""  >Choose...</option>
-                <option th:each="lunch : ${lunchDishes}" th:value="${lunch.id}" th:text="${lunch.name}"></option>
+                <option value="" th:if="${menu == null or menu.lunch == null}">Choose...</option>
+                <option th:if="${menu != null and menu.lunch != null}"
+                        th:value="${menu.lunch.id}"
+                        th:text="${menu.lunch.name}"
+                        style="background-color: gold;"
+                        th:selected="true">
+                </option>
+                <option th:each="lunch : ${lunchDishes}" th:value="${lunch.id}" th:text="${lunch.name}" th:selected="${menu != null and menu.lunch.id == lunch.id}"></option>
             </select>
             <div th:if="${#fields.hasErrors('lunchId')}" style="color: red;">
                 <p th:errors="*{lunchId}"></p>
             </div>
             <label>Dinner:</label>
             <select th:field="*{dinnerId}">
-                <option value="" >Choose...</option>
-                <option th:each="dinner : ${dinnerDishes}" th:value="${dinner.id}" th:text="${dinner.name}"></option>
+                <option value="" th:if="${ menu == null or menu.dinner == null}">Choose...</option>
+                <option th:if="${menu != null and menu.dinner != null}"
+                        th:value="${menu.dinner.id}"
+                        th:text="${menu.dinner.name}"
+                        style="background-color: gold;"
+                        th:selected="true">
+                </option>
+                <option th:each="dinner : ${dinnerDishes}" th:value="${dinner.id}" th:text="${dinner.name}" th:selected="${menu != null and menu.dinner.id == dinner.id}"></option>
             </select>
             <div th:if="${#fields.hasErrors('dinnerId')}" style="color: red;">
                 <p th:errors="*{dinnerId}"></p>

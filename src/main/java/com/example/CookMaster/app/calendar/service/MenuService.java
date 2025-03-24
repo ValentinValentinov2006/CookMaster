@@ -1,5 +1,6 @@
 package com.example.CookMaster.app.calendar.service;
 
+import com.example.CookMaster.app.calendar.model.DayOfWeek;
 import com.example.CookMaster.app.calendar.model.Menu;
 import com.example.CookMaster.app.calendar.repository.MenuRepository;
 import com.example.CookMaster.app.dish.model.Dish;
@@ -27,6 +28,16 @@ public class MenuService {
     public void createMenu(Dish breakfast, Dish lunch, Dish dinner, User user, MenuRequest menuRequest) {
         Menu menu = DtoMapper.mapMenuRequestToMenu(menuRequest);
 
+        Menu isMenuExist =  findMenuByDay(menuRequest.getDayOfWeek());
+        if (isMenuExist != null) {
+            isMenuExist.setBreakfast(breakfast);
+            isMenuExist.setLunch(lunch);
+            isMenuExist.setDinner(dinner);
+            isMenuExist.setDate(LocalDate.now());
+            menuRepository.save(isMenuExist);
+            return ;
+        }
+
         menu.setUser(user);
         menu.setBreakfast(breakfast);
         menu.setLunch(lunch);
@@ -36,5 +47,9 @@ public class MenuService {
         menuRepository.save(menu);
 
         log.info("Saving menu for %s".formatted(menu.getDayOfWeek().name()));
+    }
+
+    public Menu findMenuByDay(String day) {
+        return menuRepository.findByDayOfWeek(DayOfWeek.valueOf(day.toUpperCase()));
     }
 }
