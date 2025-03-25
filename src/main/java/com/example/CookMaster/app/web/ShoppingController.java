@@ -45,7 +45,7 @@ public class ShoppingController {
         ModelAndView modelAndView = new ModelAndView("shopping");
         User user = userService.getById(authenticationMetadata.getUserId());
         storeService.removeUnlinkedIngredients();
-        var stores = storeService.getAllStores();
+        var stores = user.getStores();
 
         if (!stores.isEmpty()) {
             log.info("Store ingredients: {}", stores.iterator().next().getIngredients());

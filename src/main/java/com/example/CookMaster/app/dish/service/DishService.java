@@ -95,10 +95,14 @@ public class DishService {
     }
 
 
-    public Dish findByName(String name) {
-        return mDishRepository.findByNameIgnoreCase(name).orElseThrow(() -> new DomainException("Dish not found"));
-    }
 
+
+    public Dish findUserDishByName(String name, User user) {
+        return user.getDishes().stream()
+                .filter(dish -> dish.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElseThrow(() -> new DomainException("Dish not found for this user"));
+    }
 
 
     public void editDishRequest(UUID id, EditDishRequest request) {

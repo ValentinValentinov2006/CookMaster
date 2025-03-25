@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/css/view-users.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Poppins:wght@300;400;700&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<header>
+    <h1>CookMaster Admin</h1>
+    <h2>User Management</h2>
+</header>
+
+<main>
+    <div class="table-container">
+
+        <table>
+            <thead>
+            <tr>
+                <th>Role</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Account Created</th>
+                <th>Change Status</th>
+                <th>Send Email</th>
+            </tr>
+            </thead>
+            <tbody id="user-table-body">
+            <tr th:each = "user : ${users}">
+                <td th:text = "${user.getRole()}"></td>
+                <td th:text = "${user.username}"></td>
+                <td th:text = "${user.email}"></td>
+                <td th:text = "${user.createdAt}"></td>
+                <td>
+                    <form th:action="@{/admin/user/{id}/status/new(id=${user.id})}" th:method="post">
+                        <input type="hidden" name="_method" value="PATCH"/>
+                        <button type="submit">Change</button>
+                    </form>
+                </td>
+                <td>
+                    <a th:href ="@{/admin/{id}/profile/go-back(id=${user.id})}">
+                    <button>Send</button>
+                    </a>
+                </td>
+            </tr>
+
+
+
+
+            </tbody>
+        </table>
+    </div>
+</main>
+<a th:href ="@{/admin/{id}/profile/go-back(id=${current.id})}">
+    <button id="cancel-btn">Go Back</button>
+</a>
+
+</body>
+</html>

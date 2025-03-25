@@ -79,7 +79,7 @@ public class DishController {
         User user = userService.getById(authenticationMetadata.getUserId());
 
         if (name != null && !name.isEmpty()) {
-            var dish = dishService.findByName(name);
+            var dish = dishService.findUserDishByName(name, user);
 
 
             if (dish != null) {

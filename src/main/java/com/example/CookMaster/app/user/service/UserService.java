@@ -1,11 +1,11 @@
 package com.example.CookMaster.app.user.service;
 
+
 import com.example.CookMaster.app.exception.DomainException;
 import com.example.CookMaster.app.security.AuthenticationMetadata;
 import com.example.CookMaster.app.user.model.User;
 import com.example.CookMaster.app.user.model.UserRole;
 import com.example.CookMaster.app.user.repository.UserRepository;
-import com.example.CookMaster.app.web.dto.LogInRequest;
 import com.example.CookMaster.app.web.dto.ProfileEditRequest;
 import com.example.CookMaster.app.web.dto.RegisterRequest;
 import jakarta.validation.Valid;
@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,18 +28,20 @@ import java.util.UUID;
 @Service
 public class UserService implements UserDetailsService {
 
-    private static final String INVALID_EMAIL_PASSWORD = "Email or password is incorrect.";
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
 
     @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+
     }
 
     @Transactional
-    public User registerUser(RegisterRequest registerRequest) {
+    public void registerUser(RegisterRequest registerRequest) {
 
         Optional<User> isUser = userRepository.getUserByUsername(registerRequest.getUsername());
         if (isUser.isPresent()) {
@@ -50,25 +54,10 @@ public class UserService implements UserDetailsService {
             throw new DomainException("Passwords don't match.");
         }
 
-        User user = userRepository.save(initializeUser(registerRequest));
-        return user;
+      userRepository.save(initializeUser(registerRequest));
     }
 
-   /* public User loginUser(LogInRequest loginRequest) {
 
-        Optional<User> isUserExisted = userRepository.getUserByEmail(loginRequest.getEmail());
-        if(isUserExisted.isEmpty()) {
-            throw new DomainException(INVALID_EMAIL_PASSWORD);
-        }
-
-        User user = isUserExisted.get();
-        if(!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new DomainException(INVALID_EMAIL_PASSWORD);
-        }
-
-
-        return user;
-    }*/
 
     private User initializeUser(RegisterRequest registerRequest) {
 
@@ -114,4 +103,17 @@ public class UserService implements UserDetailsService {
 
         userRepository.save(user);
     }
+
+    public List<User> getAllUsers() {
+        return new ArrayList<>(userRepository.findAll());
+    }
+
+    public void changeStatus(UUID id) {
+        User user = userRepository.getUserById(id);
+        user.setRole(user.getRole() == UserRole.ADMIN ? UserRole.USER : UserRole.ADMIN);
+        userRepository.save(user);
+        log.info("Successfully changed status of user [{}]", user.getUsername());
+    }
+
+
 }

@@ -7,14 +7,12 @@ import com.example.CookMaster.app.ingredient.service.IngredientService;
 import com.example.CookMaster.app.store.model.Store;
 import com.example.CookMaster.app.store.repository.StoreRepository;
 import com.example.CookMaster.app.user.model.User;
-import com.example.CookMaster.app.user.service.UserService;
 import com.example.CookMaster.app.web.dto.CreateStoreRequest;
 import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

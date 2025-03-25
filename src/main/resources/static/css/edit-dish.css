@@ -221,6 +221,7 @@ li {
     font-size: 1.2em;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    width: 100vw;
 }
 
 .save-btn:hover {
@@ -235,6 +236,7 @@ li {
     background: red;
     color: white;
     font-size: 1.2em;
+    width: 100vw;
 }
 
 .delete-btn:hover {
@@ -321,7 +323,9 @@ li {
     cursor: pointer;
 }
 #add-to-wrapper {
+    gap: 2em;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     text-align: center;
     justify-items: center;

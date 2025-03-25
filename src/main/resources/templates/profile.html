@@ -64,6 +64,14 @@
         </div>
     </div>
 
+    <div class="wrapper-functions" th:if="${user.role.name() == 'ADMIN'}">
+
+        <h2>Admin</h2>
+        <a href="/admin/view-users" class="nav-link"><i class="fas fa-plus-circle"></i> View Users</a>
+
+
+    </div>
+
     <footer></footer>
 
 

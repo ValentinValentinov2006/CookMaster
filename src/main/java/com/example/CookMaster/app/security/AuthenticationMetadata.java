@@ -28,7 +28,8 @@ public class AuthenticationMetadata implements UserDetails {
         // hasRole("ADMIN") -> "ROLE_ADMIN"
         // hasAuthority("ADMIN") -> "ADMIN"
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.name());
-
+        System.out.println("User Role: " + role.name());
+        System.out.println("Granted Authority: " + authority.getAuthority());
         return List.of(authority);
     }
 
