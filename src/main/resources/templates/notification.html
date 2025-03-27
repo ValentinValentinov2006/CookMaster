@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/view-users.css">
+    <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+<header>
+    <h1>CookMaster Admin</h1>
+    <h2>Notification</h2>
+</header>
+
+<main>
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Username</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Subject</th>
+                <th>Type</th>
+
+            </tr>
+            </thead>
+            <tbody id="user-table-body">
+
+            <tr th:each="notification : ${notifications}">
+                <td th:text="${notification.id}"></td>
+                <td th:text="${notification.subject}"></td>
+                <td th:text="${notification.body}"></td>
+                <td th:text="${notification.createdOn}"></td>
+                <td th:text="${notification.status}"></td>
+                <td th:text="${notification.type}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</body>
+</html>

@@ -62,7 +62,7 @@ public class ShoppingController {
     @PatchMapping("/shopping/products/purchase")
     public String boughtIngredientsRequest(@RequestParam ("storeName") String name) {
         storeService.deleteBoughtIngredients(name);
-        return "redirect:/profile";
+        return "redirect:/shopping";
     }
 
     @GetMapping("/users/{id}/profile/go-back")

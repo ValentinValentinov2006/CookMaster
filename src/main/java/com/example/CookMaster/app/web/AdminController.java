@@ -3,6 +3,7 @@ package com.example.CookMaster.app.web;
 
 import com.example.CookMaster.app.notification.NotificationClient;
 import com.example.CookMaster.app.notification.dto.NotificationRequest;
+import com.example.CookMaster.app.notification.dto.NotificationResponse;
 import com.example.CookMaster.app.security.AuthenticationMetadata;
 import com.example.CookMaster.app.user.model.User;
 import com.example.CookMaster.app.user.service.UserService;
@@ -76,6 +77,16 @@ public class AdminController {
 
 
         return "redirect:/admin/view-users";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/view-notifications")
+    public ModelAndView showNotificationRequest() {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("notification");
+        List<NotificationResponse> notifications = notificationClient.getAllNotifications();
+        mav.addObject("notifications", notifications);
+        return mav;
     }
 
 }
