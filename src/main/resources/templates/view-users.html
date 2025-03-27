@@ -44,9 +44,10 @@
                     </form>
                 </td>
                 <td>
-                    <a th:href ="@{/admin/{id}/profile/go-back(id=${user.id})}">
-                    <button>Send</button>
-                    </a>
+                    <form th:action="@{/admin/{id}/send-notification(id=${user.id})}" th:method="post">
+
+                        <button type="submit">Send</button>
+                    </form>
                 </td>
             </tr>
 

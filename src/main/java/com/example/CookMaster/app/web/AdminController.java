@@ -1,6 +1,8 @@
 package com.example.CookMaster.app.web;
 
 
+import com.example.CookMaster.app.notification.NotificationClient;
+import com.example.CookMaster.app.notification.dto.NotificationRequest;
 import com.example.CookMaster.app.security.AuthenticationMetadata;
 import com.example.CookMaster.app.user.model.User;
 import com.example.CookMaster.app.user.service.UserService;
@@ -18,10 +20,12 @@ import java.util.UUID;
 @RequestMapping("admin")
 public class AdminController {
 
+    private final NotificationClient notificationClient;
     private final UserService userService;
 
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController(NotificationClient notificationClient, UserService userService) {
+        this.notificationClient = notificationClient;
         this.userService = userService;
     }
 
@@ -57,6 +61,21 @@ public class AdminController {
     @GetMapping("/{id}/profile/go-back")
     public String returnProfileRequest(@PathVariable UUID id) {
         return "redirect:/profile";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/send-notification")
+    public String sendNotification(@PathVariable UUID id) {
+
+        User user = userService.getById(id);
+        String email = user.getEmail();
+
+        System.out.println("CookMaster UUID" + id);
+        NotificationRequest request = new NotificationRequest(id, "Hello, world!", email);
+        notificationClient.sendNotification(request);
+
+
+        return "redirect:/admin/view-users";
     }
 
 }
