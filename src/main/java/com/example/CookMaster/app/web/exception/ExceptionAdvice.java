@@ -1,8 +1,12 @@
 package com.example.CookMaster.app.web.exception;
 
 
+import com.example.CookMaster.app.exception.CreateDishException;
+import com.example.CookMaster.app.exception.DishDoesNotExistsException;
+import com.example.CookMaster.app.web.dto.CreateDishRequest;
 import feign.FeignException;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -30,5 +34,25 @@ public class ExceptionAdvice {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("error-admin-notif");
         return modelAndView;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({DishDoesNotExistsException.class})
+    public ModelAndView handleSearchDishException(Exception exception) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("not-found-dish");
+        return modelAndView;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BindException.class)
+    public ModelAndView handleValidationException(BindException ex) {
+        if (ex.getBindingResult().getTarget() instanceof CreateDishRequest) {
+            ModelAndView modelAndView = new ModelAndView("error-create-dish");
+            modelAndView.addObject("errors", ex.getBindingResult().getAllErrors());
+            return modelAndView;
+        }
+        return new ModelAndView("generic-error"); // fallback за други BindExceptions
     }
 }

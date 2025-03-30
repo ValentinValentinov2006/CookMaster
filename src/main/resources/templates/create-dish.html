@@ -22,7 +22,7 @@
                 <div class="name-wrapper">
                     <label for="name"><span class="required">*</span> Name:</label>
                     <input type="text" id="name" placeholder="Enter dish name" th:field="*{dishName}">
-                    <span th:if="${#fields.hasErrors('dishName')}" th:errors="*{dishName}">Dish Type Error</span>
+
                 </div>
 
                 <div class="select-wrapper">
@@ -30,14 +30,14 @@
                     <select id="type-select" th:field="*{dishType}">
                         <option th:each="type : ${dishTypes}" th:value="${type}" th:text="${type.name()}"></option>
                     </select>
-                    <span th:if="${#fields.hasErrors('dishType')}" th:errors="*{dishType}">Dish Type Error</span>
+
                 </div>
             </div>
 
             <div class="wrapper-second-row">
                 <label for="description"><span class="required">*</span> Recipe Description:</label>
                 <textarea id="description" name="description" placeholder="Describe your dish..." th:field="*{dishDescription}"></textarea>
-                <span th:if="${#fields.hasErrors('dishDescription')}" th:errors="*{dishDescription}">Dish Type Error</span>
+
             </div>
 
             <div class="ingredients-wrapper">
@@ -48,7 +48,7 @@
                 </div>
                 <ul id="ingredients-list"></ul>
                 <input type="hidden" id="ingredient-input" name="ingredients" th:field="*{ingredients}">
-                <span th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}">Dish Type Error</span>
+
             </div>
 
             <button type="submit" class="submit-btn">Create Dish</button>

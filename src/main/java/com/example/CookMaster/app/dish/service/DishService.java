@@ -4,6 +4,8 @@ package com.example.CookMaster.app.dish.service;
 import com.example.CookMaster.app.dish.model.Dish;
 import com.example.CookMaster.app.dish.model.DishType;
 import com.example.CookMaster.app.dish.repository.DishRepository;
+import com.example.CookMaster.app.exception.CreateDishException;
+import com.example.CookMaster.app.exception.DishDoesNotExistsException;
 import com.example.CookMaster.app.exception.DomainException;
 import com.example.CookMaster.app.ingredient.model.Ingredient;
 import com.example.CookMaster.app.ingredient.service.IngredientService;
@@ -49,7 +51,7 @@ public class DishService {
 
         Set<Ingredient> ingredients = convertStringsToIngredients(request.getIngredients());
         if (request.getDishName() == null || request.getDishType() == null || request.getDishDescription() == null) {
-           throw new DomainException("Invalid create dish request! All fields must be filled!");
+           throw new CreateDishException("Invalid create dish request! All fields must be filled!");
         }
 
         Dish dish = new Dish();
@@ -101,7 +103,7 @@ public class DishService {
         return user.getDishes().stream()
                 .filter(dish -> dish.getName().equalsIgnoreCase(name))
                 .findFirst()
-                .orElseThrow(() -> new DomainException("Dish not found for this user"));
+                .orElseThrow(() -> new DishDoesNotExistsException("Dish not found for this user"));
     }
 
 

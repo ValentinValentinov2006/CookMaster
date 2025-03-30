@@ -49,17 +49,8 @@ public class DishController {
     }
 
     @PostMapping("/create")
-    public ModelAndView getCreateDishRequest(@Valid CreateDishRequest request, @AuthenticationPrincipal AuthenticationMetadata authenticationMetadata
-            , BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            ModelAndView modelCreate = new ModelAndView();
-            modelCreate.setViewName("create-dish");
-            modelCreate.addObject("createDish", request);
-            modelCreate.addObject("dishTypes", DishType.values());
-            modelCreate.addObject("errors", bindingResult.getAllErrors());
+    public ModelAndView getCreateDishRequest(@Valid CreateDishRequest request, @AuthenticationPrincipal AuthenticationMetadata authenticationMetadata) {
 
-            return modelCreate;
-        }
         User user = userService.getById(authenticationMetadata.getUserId());
         dishService.createDish(request, user);
         return new ModelAndView("redirect:/profile");
