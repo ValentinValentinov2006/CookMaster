@@ -1,7 +1,6 @@
 package com.example.CookMaster.user;
 
 
-
 import com.example.CookMaster.app.exception.DomainException;
 import com.example.CookMaster.app.user.model.User;
 import com.example.CookMaster.app.user.model.UserRole;
@@ -23,6 +22,8 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
+
 
 public class UserServiceUTest {
 
@@ -72,7 +73,7 @@ public class UserServiceUTest {
     @Test
     void testRegisterUser_Success() {
 
-        RegisterRequest registerRequest = new RegisterRequest("newUser", "password", "password", "test@example.com");
+        RegisterRequest registerRequest = new RegisterRequest("newUser", "test@example.com", "password", "password");
 
 
         when(userRepository.getUserByUsername(registerRequest.getUsername())).thenReturn(Optional.empty());
@@ -103,10 +104,10 @@ public class UserServiceUTest {
 
         UUID userId = UUID.randomUUID();
         ProfileEditRequest profileEditRequest = ProfileEditRequest.builder()
-                .firstName("John")
+                .firstName("Misho")
                 .url("https://static.vecteezy.com/system/resources/thumbnails/036/324/708/small/ai-generated-picture-of-a-tiger-walking-in-the-forest-photo.jpg")
-                .lastName("Doe")
-                .email("john.doe@gmail.com")
+                .lastName("Mihov")
+                .email("misho@gmail.com")
                 .build();
 
         User user = new User();
@@ -117,10 +118,12 @@ public class UserServiceUTest {
         userService.editUserProfile(userId, profileEditRequest);
 
 
-        assertEquals("John", user.getFirstName());
-        assertEquals("Doe", user.getLastName());
+        assertEquals("Misho", user.getFirstName());
+        assertEquals("Mihov", user.getLastName());
         assertEquals("https://static.vecteezy.com/system/resources/thumbnails/036/324/708/small/ai-generated-picture-of-a-tiger-walking-in-the-forest-photo.jpg", user.getUrl());
-        assertEquals("john.doe@gmail.com", user.getEmail());
+        assertEquals("misho@gmail.com", user.getEmail());
+
+        verify(userRepository, times(1)).save(user);
     }
 
 
