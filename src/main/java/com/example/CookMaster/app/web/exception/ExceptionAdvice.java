@@ -53,6 +53,6 @@ public class ExceptionAdvice {
             modelAndView.addObject("errors", ex.getBindingResult().getAllErrors());
             return modelAndView;
         }
-        return new ModelAndView("generic-error"); // fallback за други BindExceptions
+        return new ModelAndView("error");
     }
 }
