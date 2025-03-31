@@ -100,6 +100,10 @@ public class DishService {
 
 
     public Dish findUserDishByName(String name, User user) {
+        // !!!!
+        if (name == null) {
+            throw new IllegalArgumentException("Dish name cannot be null");
+        }
         return user.getDishes().stream()
                 .filter(dish -> dish.getName().equalsIgnoreCase(name))
                 .findFirst()

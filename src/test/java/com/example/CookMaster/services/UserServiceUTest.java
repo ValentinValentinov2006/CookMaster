@@ -1,7 +1,8 @@
-package com.example.CookMaster.user;
+package com.example.CookMaster.services;
 
 
 import com.example.CookMaster.app.exception.DomainException;
+import com.example.CookMaster.app.security.AuthenticationMetadata;
 import com.example.CookMaster.app.user.model.User;
 import com.example.CookMaster.app.user.model.UserRole;
 import com.example.CookMaster.app.user.repository.UserRepository;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
@@ -164,4 +166,40 @@ public class UserServiceUTest {
         List<User> allUsers = userService.getAllUsers();
         assertEquals(2, allUsers.size());
     }
+
+    @Test
+    void givenMissingUserFromDatabase_whenLoadUserByUsername_thenExceptionIsThrown() {
+        String username = "ValAnVal";
+        when(userRepository.getUserByUsername(username)).thenReturn(Optional.empty());
+        assertThrows(DomainException.class, () -> userService.loadUserByUsername(username));
+    }
+
+
+    @Test
+    void givenExistingUser_whenLoadUserByUsername_thenReturnCorrectAuthenticationMetadata() {
+
+
+        String username = "ValAnVal2006";
+        User user = User.builder()
+                .id(UUID.randomUUID())
+                .username(username)
+                .email("valanval2006@gmail.com")
+                .password("topka123")
+                .isActive(true)
+                .role(UserRole.ADMIN)
+                .build();
+        when(userRepository.getUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
+        UserDetails authenticationMetadata = userService.loadUserByUsername(user.getEmail());
+
+        assertInstanceOf(AuthenticationMetadata.class, authenticationMetadata);
+        AuthenticationMetadata result = (AuthenticationMetadata) authenticationMetadata;
+        assertEquals(user.getId(), result.getUserId());
+        assertEquals(username, result.getUsername());
+        assertEquals(user.getPassword(), result.getPassword());
+        assertEquals(user.getRole(), result.getRole());
+        assertEquals(user.getIsActive(), result.isActive());
+        assertEquals("ROLE_ADMIN", result.getAuthorities().iterator().next().getAuthority());
+    }
+
+
 }
