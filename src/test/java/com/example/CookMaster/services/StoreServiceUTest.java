@@ -41,6 +41,7 @@ class StoreServiceUTest {
     private User mockUser;
     private Store mockStore;
     private Ingredient mockIngredient;
+    private static final String VALID_ASSIGNMENT = "Walmart:Tomato,Potato;Target:Carrot";
 
     @BeforeEach
     void setUp() {
@@ -112,5 +113,30 @@ class StoreServiceUTest {
 
         assertTrue(mockStore.getIngredients().isEmpty());
         verify(storeRepository, times(1)).saveAndFlush(mockStore);
+    }
+
+
+    @Test
+    void testUpdateStoresAndIngredients_InvalidAssignments() {
+        String invalidAssignment = "InvalidFormat";
+
+        storeService.updateStoresAndIngredients(invalidAssignment);
+
+        verify(storeRepository, never()).saveAndFlush(any(Store.class));
+    }
+
+    @Test
+    void testUpdateStoresAndIngredients_MissingIngredient() {
+        Store walmart = new Store();
+        walmart.setName("Walmart");
+
+        Ingredient missingIngredient = null;
+
+        when(storeRepository.findByName("Walmart")).thenReturn(walmart);
+        when(ingredientService.findIngredientByName("Unknown")).thenReturn(missingIngredient);
+
+        storeService.updateStoresAndIngredients("Walmart:Unknown");
+
+        verify(storeRepository).saveAndFlush(any(Store.class));
     }
 }

@@ -41,7 +41,7 @@ public class UserReportService {
         System.out.println("✅ User report generated successfully!");
     }
 
-    private void saveReportToFile(String report) {
+    public void saveReportToFile(String report) {
         try (FileWriter writer = new FileWriter("user_dish_report.txt")) {
             writer.write(report);
             System.out.println("Report saved to file: user_report.txt");

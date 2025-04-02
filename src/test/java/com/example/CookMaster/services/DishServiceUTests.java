@@ -8,6 +8,7 @@ import com.example.CookMaster.app.exception.CreateDishException;
 import com.example.CookMaster.app.exception.DishDoesNotExistsException;
 import com.example.CookMaster.app.exception.DomainException;
 import com.example.CookMaster.app.ingredient.model.Ingredient;
+import com.example.CookMaster.app.ingredient.repository.IngredientRepository;
 import com.example.CookMaster.app.ingredient.service.IngredientService;
 import com.example.CookMaster.app.store.service.StoreService;
 import com.example.CookMaster.app.user.model.User;
@@ -38,6 +39,9 @@ public class DishServiceUTests {
     @Mock
     private UserService userService;
 
+    @Mock
+    private IngredientRepository ingredientRepository;
+
     @InjectMocks
     private DishService dishService;
 
@@ -55,6 +59,7 @@ public class DishServiceUTests {
         mockDish.setUser(mockUser);
         mockIngredient = new Ingredient();
         mockIngredient.setName("Test Ingredient");
+        when(ingredientService.getmIngredientRepository()).thenReturn(ingredientRepository);
     }
 
 
@@ -195,5 +200,91 @@ public class DishServiceUTests {
         when(dishRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
         assertThrows(DomainException.class, () -> dishService.findDishNyId(mockDish.getId()));
     }
+    @Test
+    public void testCreateDish_ShouldCreateDishSuccessfully() {
+
+        Set<String> ingredientNames = new HashSet<>(Arrays.asList("Tomato", "Cheese"));
+        CreateDishRequest request = CreateDishRequest.builder()
+                .dishName("Cheese Pizza")
+                .dishDescription("A tasty cheese pizza")
+                .dishType(DishType.LUNCH)
+                .ingredients(ingredientNames)
+                .build();
+
+
+        when(ingredientService.getmIngredientRepository().findByName("Tomato")).thenReturn(Optional.of(mockIngredient));
+        when(ingredientService.getmIngredientRepository().findByName("Cheese")).thenReturn(Optional.of(mockIngredient));
+
+
+        dishService.createDish(request, mockUser);
+
+
+        verify(dishRepository, times(1)).save(any(Dish.class));
+    }
+
+    @Test
+    public void testCreateDish_ShouldThrowExceptionWhenMissingDishName() {
+
+        CreateDishRequest request = CreateDishRequest.builder()
+                .dishName(null)
+                .dishDescription("Valid description")
+                .dishType(DishType.BREAKFAST)
+                .ingredients(new HashSet<>())
+                .build();
+
+        assertThrows(CreateDishException.class, () -> dishService.createDish(request, mockUser));
+    }
+
+    @Test
+    public void testEditDishRequest_ShouldRemoveIngredientsIfNoneAreProvided() {
+
+        EditDishRequest request = new EditDishRequest("Updated Dish", DishType.DINNER, "Updated Description", new HashSet<>());
+        when(dishRepository.findById(any(UUID.class))).thenReturn(Optional.of(mockDish));
+
+
+        dishService.editDishRequest(mockDish.getId(), request);
+
+        assertTrue(mockDish.getIngredients().isEmpty());
+        verify(dishRepository, times(1)).save(mockDish);
+    }
+
+    @Test
+    public void testCreateDish_ShouldHandleNewIngredients() {
+
+        Set<String> ingredientNames = new HashSet<>(Arrays.asList("Tomato", "Cheese"));
+        CreateDishRequest request = CreateDishRequest.builder()
+                .dishName("Cheese Pizza")
+                .dishDescription("A tasty cheese pizza")
+                .dishType(DishType.LUNCH)
+                .ingredients(ingredientNames)
+                .build();
+
+
+        when(ingredientService.getmIngredientRepository().findByName("Tomato")).thenReturn(Optional.empty());
+        when(ingredientService.getmIngredientRepository().findByName("Cheese")).thenReturn(Optional.empty());
+        when(ingredientService.saveIngredientAndReturn(any(Ingredient.class))).thenReturn(mockIngredient);
+
+
+        dishService.createDish(request, mockUser);
+
+        verify(ingredientService, times(2)).saveIngredientAndReturn(any(Ingredient.class));
+        verify(dishRepository, times(1)).save(any(Dish.class));
+    }
+
+   /* @Test
+    public void testConvertStringsToIngredients_ShouldReturnValidIngredients() {
+        // Arrange
+        Set<String> ingredientNames = new HashSet<>(Arrays.asList("Tomato", "Cheese"));
+        when(ingredientService.getmIngredientRepository().findByName("Tomato")).thenReturn(Optional.of(mockIngredient));
+        when(ingredientService.getmIngredientRepository().findByName("Cheese")).thenReturn(Optional.of(mockIngredient));
+
+        // Act
+        Set<Ingredient> ingredients = dishService.convertStringsToIngredients(ingredientNames);
+
+        // Assert
+        assertEquals(2, ingredients.size());
+        assertTrue(ingredients.contains(mockIngredient));
+    }*/
+
 }
 

@@ -31,7 +31,7 @@
 
                 <ul id="ingredients-list">
                     <th:block th:each="ingredient : ${store.ingredients}">
-                        <li th:text="${ingredient.name}"></li>
+                        <li th:text="${ingredient.name}"  th:attr="data-ingredient-id=${ingredient.id}"></li>
 
                     </th:block>
                     <li th:if="${#lists.isEmpty(store.ingredients)}">No ingredients available</li>
@@ -60,18 +60,34 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-
         const ingredients = document.querySelectorAll("#ingredients-list li");
-
+        const storedKeys = Object.keys(localStorage);
+        storedKeys.forEach(key => {
+            const exists = Array.from(ingredients).some(li => li.getAttribute("data-ingredient-id") === key);
+            if (!exists) {
+                localStorage.removeItem(key);
+            }
+        });
         ingredients.forEach(li => {
+            const ingredientId = li.getAttribute("data-ingredient-id");
 
-            if (li.textContent !== "No ingredients available"){
-                li.addEventListener("click", function () {
 
-                    this.classList.toggle("bought");
-                });
+            if (localStorage.getItem(ingredientId) === "bought") {
+                li.classList.add("bought");
             }
 
+            if (li.textContent !== "No ingredients available") {
+                li.addEventListener("click", function () {
+                    this.classList.toggle("bought");
+
+
+                    if (this.classList.contains("bought")) {
+                        localStorage.setItem(ingredientId, "bought");
+                    } else {
+                        localStorage.removeItem(ingredientId);
+                    }
+                });
+            }
         });
     });
 

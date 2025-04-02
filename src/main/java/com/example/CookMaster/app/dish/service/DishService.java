@@ -78,7 +78,7 @@ public class DishService {
             mIngredientService.saveIngredient(ingredient);
         }
     }
-    private Set<Ingredient> convertStringsToIngredients(Set<String> ingredientNames) {
+    public Set<Ingredient> convertStringsToIngredients(Set<String> ingredientNames) {
         Set<Ingredient> ingredientSet = new HashSet<>();
 
         for (String name : ingredientNames) {
