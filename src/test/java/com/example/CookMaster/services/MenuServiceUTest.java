@@ -9,8 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import com.example.CookMaster.app.calendar.model.DayOfWeek;
@@ -20,6 +19,7 @@ import com.example.CookMaster.app.user.model.User;
 import com.example.CookMaster.app.web.dto.MenuRequest;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -115,6 +115,43 @@ class MenuServiceUTest {
         assertEquals(null, result);
         verify(menuRepository, times(1)).findByDayOfWeek(DayOfWeek.MONDAY);
     }
+    @Test
+    void testRemoveDishFromMenu() {
+
+
+
+       Menu menu1 = new Menu();
+       Menu menu2 = new Menu();
+
+
+        menu1.setBreakfast(breakfast);
+        menu2.setLunch(breakfast);
+
+
+        when(menuRepository.findAll()).thenReturn(Arrays.asList(menu1, menu2));
+
+        menuService.removeDishFromMenu(breakfast);
+
+
+        assertNull(menu1.getBreakfast(), "Breakfast dish should be removed from menu1");
+        assertNull(menu2.getLunch(), "Lunch dish should be removed from menu2");
+
+
+        verify(menuRepository, times(2)).save(any(Menu.class));
+    }
+
+    @Test
+    void testRemoveDishFromMenuNoDishToRemove() {
+
+        Menu menuWithoutDish = new Menu();
+        when(menuRepository.findAll()).thenReturn(Arrays.asList(menuWithoutDish));
+
+        menuService.removeDishFromMenu(breakfast);
+
+
+        verify(menuRepository, never()).save(any(Menu.class));
+    }
+
 
 
 }

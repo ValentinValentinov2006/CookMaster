@@ -1,12 +1,14 @@
 package com.example.CookMaster.app.dish.service;
 
 
+import com.example.CookMaster.app.calendar.service.MenuService;
 import com.example.CookMaster.app.dish.model.Dish;
 import com.example.CookMaster.app.dish.model.DishType;
 import com.example.CookMaster.app.dish.repository.DishRepository;
 import com.example.CookMaster.app.exception.CreateDishException;
 import com.example.CookMaster.app.exception.DishDoesNotExistsException;
 import com.example.CookMaster.app.exception.DomainException;
+import com.example.CookMaster.app.exception.NotHaveEnoughDishes;
 import com.example.CookMaster.app.ingredient.model.Ingredient;
 import com.example.CookMaster.app.ingredient.service.IngredientService;
 import com.example.CookMaster.app.store.service.StoreService;
@@ -34,13 +36,15 @@ public class DishService {
     private final IngredientService mIngredientService;
     private final StoreService mStoreService;
     private final UserService userService;
+    private final MenuService menuService;
 
     @Autowired
-    public DishService(DishRepository mDishRepository, @Lazy IngredientService mIngredientService, StoreService mStoreService, UserService userService) {
+    public DishService(DishRepository mDishRepository, @Lazy IngredientService mIngredientService, StoreService mStoreService, UserService userService, MenuService menuService) {
         this.mDishRepository = mDishRepository;
         this.mIngredientService = mIngredientService;
         this.mStoreService = mStoreService;
         this.userService = userService;
+        this.menuService = menuService;
     }
 
     @Transactional
@@ -130,10 +134,16 @@ public class DishService {
 
     public void deleteDish(UUID id) {
 
-        Dish dish = mDishRepository.findById(id).orElseThrow(() -> new DomainException("Dish not found"));
+        Dish dish = mDishRepository.findById(id)
+                .orElseThrow(() -> new DomainException("Dish not found"));
+
+
+        menuService.removeDishFromMenu(dish);
+
+
         mDishRepository.delete(dish);
 
-        log.info("Dish with %s was deleted with (id) %s!".formatted(dish.getName(), dish.getId()));
+        log.info("Dish {} was deleted with ID {}", dish.getName(), dish.getId());
     }
 
     public Dish findDishNyId(UUID dishId) {
@@ -189,6 +199,20 @@ public class DishService {
 
         return daysMap.getOrDefault(dayName, "Unknown Day");
     }
+
+
+    public void checkIfYouHaveThreeDifferentDishes(User user) {
+        Set<Dish> dishes = user.getDishes();
+    boolean hasBreakfast = dishes.stream().anyMatch(dish -> dish.getType() == DishType.BREAKFAST);
+    boolean hasLunch = dishes.stream().anyMatch(dish -> dish.getType() == DishType.LUNCH);
+    boolean hasDinner = dishes.stream().anyMatch(dish -> dish.getType() == DishType.DINNER);
+
+        if (hasBreakfast && hasLunch && hasDinner) {
+        log.info("You have dishes for breakfast, lunch, and dinner!");
+    } else {
+        throw new NotHaveEnoughDishes("You are missing some dish types!");
+    }
+}
 }
 
 

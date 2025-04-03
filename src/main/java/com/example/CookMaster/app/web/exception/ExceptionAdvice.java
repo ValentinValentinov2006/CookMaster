@@ -1,8 +1,9 @@
 package com.example.CookMaster.app.web.exception;
 
 
-import com.example.CookMaster.app.exception.CreateDishException;
+
 import com.example.CookMaster.app.exception.DishDoesNotExistsException;
+import com.example.CookMaster.app.exception.NotHaveEnoughDishes;
 import com.example.CookMaster.app.web.dto.CreateDishRequest;
 import feign.FeignException;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,17 @@ public class ExceptionAdvice {
     }
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({
+            NotHaveEnoughDishes.class
+    })
+    public ModelAndView handleNotHaveSufficientDishesException(Exception exception) {
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("not-sufficient-dishes");
+
+        return modelAndView;
+    }
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({
             FeignException.class
     })
     public ModelAndView handleFeignExceptionExceptions(Exception exception) {
@@ -35,6 +47,7 @@ public class ExceptionAdvice {
         modelAndView.setViewName("error-admin-notif");
         return modelAndView;
     }
+
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({DishDoesNotExistsException.class})

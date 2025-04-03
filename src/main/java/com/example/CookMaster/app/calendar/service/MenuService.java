@@ -52,4 +52,31 @@ public class MenuService {
     public Menu findMenuByDay(String day) {
         return menuRepository.findByDayOfWeek(DayOfWeek.valueOf(day.toUpperCase()));
     }
+
+    @Transactional
+    public void removeDishFromMenu(Dish dish) {
+
+        var menus = menuRepository.findAll();
+
+        for (Menu menu : menus) {
+            boolean updated = false;
+
+            if (menu.getBreakfast() != null && menu.getBreakfast().equals(dish)) {
+                menu.setBreakfast(null);
+                updated = true;
+            }
+            if (menu.getLunch() != null && menu.getLunch().equals(dish)) {
+                menu.setLunch(null);
+                updated = true;
+            }
+            if (menu.getDinner() != null && menu.getDinner().equals(dish)) {
+                menu.setDinner(null);
+                updated = true;
+            }
+
+            if (updated) {
+                menuRepository.save(menu);
+            }
+        }
+    }
 }

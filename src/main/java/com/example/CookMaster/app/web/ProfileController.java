@@ -36,14 +36,14 @@ public class ProfileController {
     }
     @PatchMapping("/{id}/profile")
     public ModelAndView updateEditProfilePage(@PathVariable UUID id, @Valid ProfileEditRequest profileEditRequest, BindingResult bindingResult) {
-            if (bindingResult.hasErrors()) {
-                ModelAndView mav = new ModelAndView("editProfile");
-                mav.addObject("user", userService.getById(id));
-                mav.addObject("profileRequest", profileEditRequest);
-                return mav;
-            }
+        if (bindingResult.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView("editProfile");
+            modelAndView.addObject("profileEditRequest", profileEditRequest);
+            modelAndView.addObject("errors", bindingResult.getAllErrors());
+            return modelAndView;
+        }
 
-            userService.editUserProfile(id, profileEditRequest);
+        userService.editUserProfile(id, profileEditRequest);
 
         return new ModelAndView("redirect:/profile");
     }

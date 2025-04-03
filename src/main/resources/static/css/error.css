@@ -1,73 +1,60 @@
-* {
+body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: "Poppins", sans-serif;
-    background: linear-gradient(150deg, #ffbc03, #f58726);
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    padding: 20px;
-    overflow: auto;
+    text-align: center;
+    background: linear-gradient(150deg, #ff4d4d, #ff884d);
+    font-family: 'Arial', sans-serif;
+    color: white;
+    overflow: hidden;
 }
 
-header {
+.container {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    max-width: 400px;
     text-align: center;
-    margin-bottom: 30px;
+}
+
+.icon {
+    font-size: 50px;
+    color: white;
+    animation: shake 1s infinite alternate;
+}
+
+@keyframes shake {
+    0% { transform: rotate(-5deg); }
+    100% { transform: rotate(5deg); }
 }
 
 h1 {
-    font-size: 6em;
-    color: white;
-    letter-spacing: 2px;
-    animation: fadeIn 2s ease-in-out;
+    font-size: 26px;
+    margin-bottom: 10px;
 }
 
-.form-wrapper {
-    background-color: white;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    border-radius: 1.5em;
-    padding: 40px;
-    box-shadow: 10px 20px 40px rgba(255, 255, 255, 0.8);
-    text-align: center;
-}
-
-h2 {
-    font-family: "Playfair Display", serif;
-    color: #ffbc03;
-    font-size: 2em;
-    margin-bottom: 15px;
-}
-
-.error-text {
-    font-size: 1.1em;
-    color: #555;
+p {
+    font-size: 18px;
     margin-bottom: 20px;
 }
 
-.submit-btn {
-    padding: 12px;
-    font-size: 1.1em;
-    background-color: #ffbc03;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    text-decoration: none;
+.btn {
     display: inline-block;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-    width: 100%;
-    text-align: center;
+    padding: 12px 24px;
+    font-size: 16px;
+    color: #ff4d4d;
+    background: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.3s ease;
 }
 
-.submit-btn:hover {
-    background-color: #f58726;
-    transform: scale(1.05);
+.btn:hover {
+    background: #ffcccc;
 }

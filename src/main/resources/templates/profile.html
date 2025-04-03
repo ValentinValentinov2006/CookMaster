@@ -31,7 +31,7 @@
 
     <div class="wrapper-profile">
         <div class="img-wrapper">
-            <img th:src="${user.url != null ? user.url : 'https://cdn-icons-png.freepik.com/256/1830/1830878.png?semt=ais_hybrid'}"
+            <img th:src="${user.url != null && !user.url.isEmpty() ? user.url : 'https://static.vecteezy.com/system/resources/previews/052/793/073/non_2x/chef-logo-design-vector.jpg'}"
                  alt="Profile Picture" id="photo">
             <p th:text="${user.username}"></p>
             <div class="wrapper-user-id">

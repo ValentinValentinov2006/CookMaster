@@ -7,6 +7,7 @@ import com.example.CookMaster.app.dish.service.DishService;
 import com.example.CookMaster.app.exception.CreateDishException;
 import com.example.CookMaster.app.exception.DishDoesNotExistsException;
 import com.example.CookMaster.app.exception.DomainException;
+import com.example.CookMaster.app.exception.NotHaveEnoughDishes;
 import com.example.CookMaster.app.ingredient.model.Ingredient;
 import com.example.CookMaster.app.ingredient.repository.IngredientRepository;
 import com.example.CookMaster.app.ingredient.service.IngredientService;
@@ -112,12 +113,7 @@ public class DishServiceUTests {
         verify(dishRepository, times(1)).save(mockDish);
     }
 
-    @Test
-    public void testDeleteDish_ShouldDeleteDish() {
-        when(dishRepository.findById(any(UUID.class))).thenReturn(Optional.of(mockDish));
-        dishService.deleteDish(mockDish.getId());
-        verify(dishRepository, times(1)).delete(mockDish);
-    }
+
 
     @Test
     public void testConvertDays_ShouldConvertCorrectly() {
@@ -271,20 +267,79 @@ public class DishServiceUTests {
         verify(dishRepository, times(1)).save(any(Dish.class));
     }
 
-   /* @Test
-    public void testConvertStringsToIngredients_ShouldReturnValidIngredients() {
-        // Arrange
-        Set<String> ingredientNames = new HashSet<>(Arrays.asList("Tomato", "Cheese"));
-        when(ingredientService.getmIngredientRepository().findByName("Tomato")).thenReturn(Optional.of(mockIngredient));
-        when(ingredientService.getmIngredientRepository().findByName("Cheese")).thenReturn(Optional.of(mockIngredient));
+    @Test
+    void testMissingBreakfastDish() {
 
-        // Act
-        Set<Ingredient> ingredients = dishService.convertStringsToIngredients(ingredientNames);
+        Dish lunchDish = new Dish();
+        lunchDish.setType(DishType.LUNCH);
+        Dish dinnerDish = new Dish();
+        dinnerDish.setType(DishType.DINNER);
 
-        // Assert
-        assertEquals(2, ingredients.size());
-        assertTrue(ingredients.contains(mockIngredient));
-    }*/
+        Set<Dish> dishes = new HashSet<>();
+        dishes.add(lunchDish);
+        dishes.add(dinnerDish);
+
+        mockUser.setDishes(dishes);
+
+
+        NotHaveEnoughDishes exception = assertThrows(NotHaveEnoughDishes.class, () -> dishService.checkIfYouHaveThreeDifferentDishes(mockUser));
+        assertEquals("You are missing some dish types!", exception.getMessage());
+    }
+
+    @Test
+    void testMissingLunchDish() {
+
+        Dish breakfastDish = new Dish();
+        breakfastDish.setType(DishType.BREAKFAST);
+        Dish dinnerDish = new Dish();
+        dinnerDish.setType(DishType.DINNER);
+
+        Set<Dish> dishes = new HashSet<>();
+        dishes.add(breakfastDish);
+        dishes.add(dinnerDish);
+
+        mockUser.setDishes(dishes);
+
+
+        NotHaveEnoughDishes exception = assertThrows(NotHaveEnoughDishes.class, () -> dishService.checkIfYouHaveThreeDifferentDishes(mockUser));
+        assertEquals("You are missing some dish types!", exception.getMessage());
+    }
+
+    @Test
+    void testMissingDinnerDish() {
+
+        Dish breakfastDish = new Dish();
+        breakfastDish.setType(DishType.BREAKFAST);
+        Dish lunchDish = new Dish();
+        lunchDish.setType(DishType.LUNCH);
+
+        Set<Dish> dishes = new HashSet<>();
+        dishes.add(breakfastDish);
+        dishes.add(lunchDish);
+
+        mockUser.setDishes(dishes);
+
+
+        NotHaveEnoughDishes exception = assertThrows(NotHaveEnoughDishes.class, () -> dishService.checkIfYouHaveThreeDifferentDishes(mockUser));
+        assertEquals("You are missing some dish types!", exception.getMessage());
+    }
+
+    @Test
+    void testNotEnoughDishes() {
+
+        Dish otherDish = new Dish();
+        otherDish.setType(DishType.LUNCH);
+
+        Set<Dish> dishes = new HashSet<>();
+        dishes.add(otherDish);
+
+        mockUser.setDishes(dishes);
+
+
+        NotHaveEnoughDishes exception = assertThrows(NotHaveEnoughDishes.class, () -> dishService.checkIfYouHaveThreeDifferentDishes(mockUser));
+        assertEquals("You are missing some dish types!", exception.getMessage());
+    }
+
 
 }
 

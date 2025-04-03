@@ -1,6 +1,7 @@
 package com.example.CookMaster.app.web;
 
 
+import com.example.CookMaster.app.calendar.model.DayOfWeek;
 import com.example.CookMaster.app.calendar.model.Menu;
 import com.example.CookMaster.app.calendar.service.MenuService;
 import com.example.CookMaster.app.dish.model.Dish;
@@ -47,6 +48,21 @@ public class MenuController {
         String day = dishService.convertDays(dayName);
         Menu menu =  menuService.findMenuByDay(day);
 
+
+        if (menu == null) {
+            menu = new Menu();
+            menu.setUser(user);
+            menu.setDayOfWeek(DayOfWeek.valueOf(day.toUpperCase()));
+        }
+        if (menu.getBreakfast() == null) {
+            menu.setBreakfast(new Dish("Choose option", "breakfast"));
+        }
+        if (menu.getLunch() == null) {
+            menu.setLunch(new Dish("Choose option", "lunch"));
+        }
+        if (menu.getDinner() == null) {
+            menu.setDinner(new Dish("Choose option", "dinner"));
+        }
 
         List<Dish> breakfastDishes = dishService.getBreakfastDishes(dishes);
         List<Dish> lunchDishes = dishService.getLunchDishes(dishes);

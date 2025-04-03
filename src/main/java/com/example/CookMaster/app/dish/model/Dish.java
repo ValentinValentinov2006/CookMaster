@@ -54,6 +54,11 @@ public class Dish {
     )
     private Set<Ingredient> ingredients;
 
+    public Dish(String chooseOption, String dinner) {
+        this.name = chooseOption;
+        this.description = chooseOption;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, name);

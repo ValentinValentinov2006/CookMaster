@@ -52,6 +52,7 @@ public class ShoppingController {
 
         } else {
             log.info("No stores found");
+            modelAndView.addObject("info", "No stores have been created yet!");
         }
 
         modelAndView.addObject("stores", stores);

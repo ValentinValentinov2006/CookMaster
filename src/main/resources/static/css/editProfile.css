@@ -13,6 +13,11 @@ body {
     align-items: center;
 }
 
+#info {
+    margin: 0 0 2em 0;
+    color: red;
+}
+
 header {
     width: 100vw;
     text-align: center;

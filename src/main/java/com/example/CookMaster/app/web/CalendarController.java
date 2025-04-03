@@ -1,5 +1,6 @@
 package com.example.CookMaster.app.web;
 
+import com.example.CookMaster.app.dish.service.DishService;
 import com.example.CookMaster.app.security.AuthenticationMetadata;
 import com.example.CookMaster.app.user.model.User;
 import com.example.CookMaster.app.user.service.UserService;
@@ -18,16 +19,19 @@ import java.util.UUID;
 public class CalendarController {
 
     private final UserService userService;
+    private final DishService dishService;
 
     @Autowired
-    public CalendarController(UserService userService) {
+    public CalendarController(UserService userService, DishService dishService) {
         this.userService = userService;
+        this.dishService = dishService;
     }
 
     @GetMapping
     public ModelAndView getCalendarRequest(@AuthenticationPrincipal AuthenticationMetadata authenticationMetadata) {
         ModelAndView modelAndView = new ModelAndView();
         User user = userService.getById(authenticationMetadata.getUserId());
+        dishService.checkIfYouHaveThreeDifferentDishes(user);
         modelAndView.addObject("user", user);
         modelAndView.setViewName("calendar");
         return modelAndView;

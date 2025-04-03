@@ -16,8 +16,12 @@
 
 <main>
     <div class="wrapper-card">
+        <div th:if="${#lists.isEmpty(stores)}">
+            <p id="special-text">No stores have been created yet!</p>
+        </div>
+
         <div class="wrapper-shopping">
-            <!-- Извеждаме всички магазини като карти -->
+
             <div th:each="store : ${stores}" class="dish-card">
                 <h4 th:text="${store.name}">Store Name</h4>
 

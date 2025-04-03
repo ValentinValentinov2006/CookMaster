@@ -16,6 +16,11 @@
 
 <main>
     <h1>Your Profile</h1>
+    <error id="info">⚠️All fields must be filled⚠️</error>
+
+
+
+
     <form th:action="@{/users/{id}/profile(id=${user.id})}" th:method="POST" th:object="${profileRequest}">
         <input type="hidden" name="_method" value="PATCH"/>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
